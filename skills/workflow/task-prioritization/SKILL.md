@@ -7,17 +7,21 @@ related_skills: [meta-orchestrator, dispatching-parallel-agents, error-recovery]
 triggers:
   keywords:
     - 优先级
-    - 排序
     - 先做哪个
-    - 多任务
-    - 并发
-    - 紧急
-    - 重要
     - 排队
-    - prioritization
-    - queue
+    - 哪个重要
+    - 紧急
+    - 有序
+    - 排序
+    - 优先
+    - task priority
+    - priority queue
     - urgent
-    - parallel
+    - important
+    - order
+    - 先处理
+    - 先搞定
+    - 哪个先
 ---
 
 # Task Prioritization — 任务优先级框架 v1
@@ -89,11 +93,17 @@ P0 任务可中断 P1/P2 的执行（但需保存上下文）
 ## 适用场景
 
 ### 入口条件
+
 - 同时收到多个任务请求
-- 需要决定先执行哪一个
-- 当前执行的任务被新的事件打断
+ - 当前任务被更高优先级事件打断
+ - 用户明确指定了优先级
 
 ### 出口条件
-- 任务按优先级排序完毕
-- 高优先级任务已开始执行
-- 被中断的任务状态已保存
+
+- P0-P3 优先级已分配
+ - 高优先级任务已开始执行
+ - 被中断的任务状态已保存
+ - 优先级排序结果已通知用户
+
+
+

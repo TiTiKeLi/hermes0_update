@@ -6,21 +6,22 @@ platforms: [linux, windows]
 related_skills: [verification-before-completion, meta-orchestrator]
 triggers:
   keywords:
-    - 失败
-    - 错误
-    - 异常
-    - 超时
     - 重试
-    - 降级
-    - 恢复
-    - 挂了
-    - 崩溃
+    - 失败重试
+    - 再试一次
+    - 又失败了
     - 不工作
+    - 恢复
+    - 错误处理
+    - 降级
+    - error recovery
     - retry
-    - failed
-    - error
-    - timeout
-    - crash
+    - fallback
+    - exception
+    - 任务失败
+    - 操作失败
+    - 没成功
+    - 自动恢复
   tools:
     - terminal
     - web_extract
@@ -122,14 +123,18 @@ error_chain:
 ## 适用场景
 
 ### 入口条件
-- 工具/技能执行返回了非预期错误
-- 网络请求超时或失败
-- 模型调用异常
-- 文件操作失败
+
+- 工具或技能执行返回了非预期错误
+ - 网络请求超时或连接失败
+ - 模型调用返回异常
+ - 连续重试同一个工具超过 3 次
 
 ### 出口条件
-- 操作成功完成（直接或降级）→ 继续
-- 所有路径都失败 → 记录错误链，报告用户，不阻塞
+
+- 任务通过重试成功完成
+ - 降级方案已执行并在结果中标注
+ - 所有恢复路径都失败 → 错误链已记录
+ - 恢复尝试未超过 5 次限制
 
 ## 通用原则
 
@@ -138,3 +143,4 @@ error_chain:
 3. **错误隔离**：一个任务的失败不影响其他任务
 4. **死循环保护**：总重试次数不超过 5 次，总等待不超过 60s
 5. **学习**：相同的错误模式持续出现时，触发 autogpt-self-improve 分析根因
+
