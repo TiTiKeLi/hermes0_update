@@ -93,3 +93,5 @@ config.yaml.corrupt*
 
 # === 空目录 ===
 bin/
+
+cron/output/
