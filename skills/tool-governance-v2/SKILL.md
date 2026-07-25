@@ -9,18 +9,17 @@ conditions:
 platforms: [linux]
 triggers:
   keywords:
-      - 工具治理
-      - tool governance
-      - 工具治理v2
-      - tool governance v2
-      - 前置拦截
-      - 后置钩子
-      - 拦截器
-      - toolstate
-      - state registry
-      - kind
-      - 六刀审计
-      - verifier agent
+    - 工具管理
+    - 工具权限
+    - 允许哪些工具
+    - 禁用工具
+    - 工具治理
+    - tool governance
+    - tool permission
+    - 工具控制
+    - 工具审计
+    - 开放工具
+    - 关闭工具
 ---
 
 # Tool Governance Architecture v2
@@ -245,3 +244,17 @@ Verifier agent 必须只读（Read/Grep/Glob/Bash 只读工具），不能有写
 - **不要迷信前置拦截** — can_call 只在手动调用时触发，如果绕过 registry 直接调工具，拦截器失效。需要 hooks 层兜底
 - **matcher 粒度要精确** — hooks 的 `"Write|Edit"` 是粗粒度匹配，误触发会导致不必要的开销
 - **hooks 的 STDOUT 可能不被捕获** — 已知 bug（anthropics/claude-code#10875），inline hooks 比 plugin hooks 更可靠
+## 适用场景
+
+### 入口条件
+
+- 相关场景触发词被命中
+- 用户明确提出了该技能覆盖的问题
+- 系统状态满足前置条件
+
+### 出口条件
+
+- 问题已解决或结论已输出
+- 所有必要的操作已完成
+- 结果已向用户报告
+

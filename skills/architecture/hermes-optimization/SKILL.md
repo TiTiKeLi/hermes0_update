@@ -8,12 +8,20 @@ platforms: [linux, wsl]
 related_skills: [github-discover, memory-compactor, agent-memory-architecture]
 triggers:
   keywords:
-      - 优化
-      - optimize
-      - 性能
-      - docker容器
-      - 错误修复
-      - 回复格式
+    - 优化
+    - 性能
+    - 加速
+    - 变慢
+    - 卡顿
+    - 资源占用
+    - 内存
+    - CPU
+    - optimization
+    - performance
+    - docker优化
+    - 容器优化
+    - 容器性能
+    - hermes优化
 ---
 
 # Hermes 容器优化 (Hermes Optimization)
@@ -315,3 +323,17 @@ Ollama: host.docker.internal:11434
 | `C:\Users\Lsc\.hermes\toolbox` | 新建目录 | 删除目录 |
 | `skills/behavior/caveman-reply/SKILL.md` | 新建 | 删除文件 |
 | `skills/architecture/hermes-optimization/SKILL.md` | edit | 回退到旧版本 |
+## 适用场景
+
+### 入口条件
+
+- 相关场景触发词被命中
+- 用户明确提出了该技能覆盖的问题
+- 系统状态满足前置条件
+
+### 出口条件
+
+- 问题已解决或结论已输出
+- 所有必要的操作已完成
+- 结果已向用户报告
+

@@ -13,16 +13,16 @@ related_skills:
   - tool-governance-v2
 triggers:
   keywords:
-      - 下载
-      - download
-      - secure download
-      - 安全下载
-      - curl
-      - wget
-      - git clone
-      - 获取文件
-  tool_calls:
-      - terminal
+    - 安全下载
+    - 下载文件
+    - 下载安全
+    - 下载检查
+    - 下载验证
+    - secure download
+    - download check
+    - 文件下载
+    - 安全检查
+    - 下载防护
 ---
 
 # Secure Download — 下载安全门卫
@@ -46,10 +46,11 @@ triggers:
 
 ## 1. 边界条件
 
-### 入口条件（必须全部满足）
-- [ ] 有外部内容的来源描述（URL / 文件路径 / 用户粘贴的内容）
-- [ ] 内容要进入 Hermes 文件系统 (`/opt/data/`)
-- [ ] 当前未处于 degraded / offline 模式
+### 入口条件
+
+- 需要从外部源下载文件
+ - 下载前需要安全检查
+ - 文件来源不可信
 
 ### 跳过条件（一条即跳过）
 - [ ] 内容来源是 `trusted.json` 白名单中的已知路径
@@ -219,3 +220,10 @@ triggers:
 1. **来源可信度**（域名、star数、许可证、活动时间）
 2. **内容静态扫描**（凭据泄露、恶意模式）
 3. **传输层安全**（SSL 验证是锦上添花，非必要条件）
+
+### 出口条件
+
+- 问题已解决或结论已输出
+- 所有必要的操作已完成
+- 结果已向用户报告
+

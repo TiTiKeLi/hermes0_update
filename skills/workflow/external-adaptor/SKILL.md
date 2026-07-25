@@ -17,15 +17,17 @@ related_skills:
   - meta-orchestrator
 triggers:
   keywords:
-      - 外部适配
-      - external adapt
-      - 下载集成
-      - 拆解重组
-      - ZIP
-      - 集成管道
-  tool_calls:
-      - terminal
-      - write_file
+    - 外部项目
+    - 外部集成
+    - 引入外部
+    - 下载项目
+    - 外部适配
+    - external adapt
+    - import project
+    - 外部引入
+    - 外部适配
+    - 外部代码
+    - 集成外部
 ---
 
 # External Adaptor v1 — 外部项目/Skill 适配管道
@@ -37,10 +39,11 @@ triggers:
 
 ## 1. 边界条件
 
-### 入口条件（必须全部满足）
-- [ ] 用户提供了外部来源（URL、文件路径、或明确说"参考这个项目/技能"）
-- [ ] 来源内容可获取（网络可达或用户已下载到本地）
-- [ ] 来源有可复用的模式/结构/功能（不是纯README/文档）
+### 入口条件
+
+- 需要将外部项目集成到 Hermes
+ - 外部项目需要拆解和适配
+ - 需要下载并分析外部代码
 
 ### 跳过条件（一条即跳过）
 - [ ] 该功能/模式已在我们的 skill 或项目中存在
@@ -591,3 +594,10 @@ cronjob run → exit ok
 - name: old-skill-name
   status: merged:target-skill-name
 ```
+
+### 出口条件
+
+- 问题已解决或结论已输出
+- 所有必要的操作已完成
+- 结果已向用户报告
+

@@ -11,15 +11,17 @@ platforms: [linux]
 related_skills: [hermes-optimization, memory-compactor]
 triggers:
   keywords:
-      - github
-      - 开源
-      - repo
-      - 项目发现
-      - 发现项目
-      - 提取部署
-      - arxiv
-  tool_calls:
-      - terminal
+    - GitHub
+    - 开源项目
+    - 发现项目
+    - 搜索项目
+    - GitHub搜索
+    - github discover
+    - find repo
+    - 开源发现
+    - 项目发现
+    - GitHub项目
+    - repo搜索
   events:
       - user_request
 ---
@@ -28,12 +30,11 @@ triggers:
 
 ## 1. 边界条件
 
-### 入口条件（必须全部满足才进入）
-- [ ] 用户给出了一个具体需求（不是闲聊/确认/追问）
-- [ ] 我判断该需求需要外部 GitHub 项目或 arXiv 论文作为依据
-- [ ] 需求已被拆解为本质锚点（见 Step 0）
-- [ ] 当前没有被更高优先级的任务阻塞（容器崩溃、关键bug修复等）
-- [ ] research_orchestrator.py 存在（`/opt/data/scripts/research_orchestrator.py` — 若不存在，降级为手动 HTTP scraping，见 Step 1 方法 B）
+### 入口条件
+
+- 用户需求需要外部 GitHub 项目支持
+ - 当前本地项目无法满足需求
+ - 需要寻找开源解决方案
 
 ### 跳过条件（任何一条满足就直接跳过，不走任何研究步骤）
 - [ ] 用户需求仅需本地知识就能回答（已有 skill / 已有 fact_store 记录）
@@ -307,3 +308,10 @@ if 连续 3 次搜索空结果:
   write_file(path="research/topics/<slug>/DEADEND", content="原因+时间")
   → 该话题标记为"无开源依据"，下次直接跳过搜索
 ```
+
+### 出口条件
+
+- 问题已解决或结论已输出
+- 所有必要的操作已完成
+- 结果已向用户报告
+

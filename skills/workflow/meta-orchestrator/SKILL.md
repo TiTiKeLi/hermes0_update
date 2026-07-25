@@ -14,11 +14,19 @@ related_skills:
   - tool-governance-v2
 triggers:
   keywords:
-      - 元编排
-      - orchestrat
-      - 子任务分发
-      - 评分汇总
-      - 生命周期管理
+    - 编排
+    - 子任务
+    - 分发任务
+    - 拆分任务
+    - 分配
+    - 协调
+    - orchestrate
+    - subtask
+    - task dispatch
+    - 任务拆分
+    - 任务分发
+    - 协调多个
+    - 编排任务
 ---
 
 # Meta-Orchestrator v1 — 元编排系统
@@ -36,10 +44,11 @@ triggers:
 
 ## 1. 边界条件
 
-### 入口条件（必须全部满足）
-- [ ] 用户提供了一个具体的需求/目标（不是闲聊）
-- [ ] agent_registry.py 可运行（`python3 /opt/data/scripts/agent_registry.py list`）
-- [ ] 至少注册了 2 个 agent（`agent_registry.py list` 非空）
+### 入口条件
+
+- 复杂任务需要拆分为子任务
+ - 需要多个子智能体协作
+ - 任务需要全生命周期管理
 
 ### Ollama 可用性标志
 ⛔ **Ollama 可能不可用**。`host.docker.internal:11434` 在宿主休眠或繁忙时超时。
@@ -340,3 +349,10 @@ delegate_task 默认最多 3 个子 agent 并发（max_concurrent_children）。
 
 ### 5.6 持久化记录
 所有规划、任务、结果、评分都持久化到 `/opt/data/agents/plans/` 下，可被后续查询和复用。
+
+### 出口条件
+
+- 问题已解决或结论已输出
+- 所有必要的操作已完成
+- 结果已向用户报告
+

@@ -5,11 +5,16 @@ category: memory
 related_skills: [memory-compactor, caveman-compress]
 triggers:
   keywords:
-      - 记忆同步
-      - memory sync
-      - 分层记忆
-      - hot cache
-      - fact_store同步
+    - 记忆同步
+    - 记忆分层
+    - 同步记忆
+    - 记忆更新
+    - sync memory
+    - memory hierarchy
+    - 层次记忆
+    - 记忆管理
+    - 记忆归档
+    - 记忆梳理
   events:
       - session_start
       - memory_written
@@ -168,3 +173,17 @@ manual_archive([fact_id_1, fact_id_2])
 
 ## 引用文件
 - `scripts/memory-sync.py` — v2 同步脚本（15.7KB，完整实现）
+## 适用场景
+
+### 入口条件
+
+- 相关场景触发词被命中
+- 用户明确提出了该技能覆盖的问题
+- 系统状态满足前置条件
+
+### 出口条件
+
+- 问题已解决或结论已输出
+- 所有必要的操作已完成
+- 结果已向用户报告
+

@@ -9,16 +9,18 @@ conditions:
 platforms: [linux]
 triggers:
   keywords:
-      - 完成
-      - 修复
-      - 测试通过
-      - 验证
-      - 确认
-      - 上传
-      - 部署
-      - 搞定
-      - 完成了
-      - 成功
+    - 验证
+    - 确认
+    - 检查
+    - 测试通过
+    - 验证成功
+    - verification
+    - verify
+    - double check
+    - 确认一下
+    - 检查结果
+    - 验证结果
+    - 确保正确
   events:
       - task_completion
 ---
@@ -43,10 +45,11 @@ triggers:
 
 ## 1. 边界条件
 
-### 入口条件（必须全部满足）
-- [ ] 正在执行有明确可验证产出的任务（测试、修复、构建、部署、上传、**技能创建/修改**）
-- [ ] 有可执行的验证命令（测试命令、构建命令、linter、curl 健康检查、**skill_view + delegate_task**）
-- [ ] 验证命令产生了可读的输出（exit code，stdout，或子智能体返回结果）
+### 入口条件
+
+- 任务执行完成需要确认结果
+ - 修改代码后需要验证
+ - 声明成功前需要证据
 
 ### 跳过条件（一条即跳过）
 - [ ] 纯文字/创意类工作（无代码产出）
@@ -175,3 +178,10 @@ assert "exit" in conclusion or "输出" in conclusion or "测试" in conclusion
   "corrected": true/false
 }
 ```
+
+### 出口条件
+
+- 问题已解决或结论已输出
+- 所有必要的操作已完成
+- 结果已向用户报告
+

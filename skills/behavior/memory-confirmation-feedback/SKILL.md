@@ -4,11 +4,18 @@ description: 记忆写入后反馈新事实与已有记忆的关联网络，一�
 category: behavior
 triggers:
   keywords:
-      - 记忆确认
-      - memory feedback
-      - 记忆反馈
-      - feedback protocol
-      - memory_write_occurred
+    - 记忆确认
+    - 写入反馈
+    - 记住
+    - 忘了
+    - 记忆反馈
+    - 反馈确认
+    - memory confirm
+    - feedback
+    - 确认记住
+    - 记忆写入
+    - 反馈协议
+    - 记住了吗
   events:
       - memory_written
 ---
@@ -74,3 +81,17 @@ memory_write_occurred: false
 - SKILL.md 磁盘持久化，每次新会话自动扫描加载
 - `memory_write_occurred` 参数定义在 skill prompt 中，不依赖会话历史
 - memory 中存有 fallback 条目（id:20）
+## 适用场景
+
+### 入口条件
+
+- 相关场景触发词被命中
+- 用户明确提出了该技能覆盖的问题
+- 系统状态满足前置条件
+
+### 出口条件
+
+- 问题已解决或结论已输出
+- 所有必要的操作已完成
+- 结果已向用户报告
+

@@ -11,11 +11,17 @@ platforms: [linux]
 related_skills: [github-discover, skill-creation-rules]
 triggers:
   keywords:
-      - 模型路由
-      - model router
-      - deepseek分发
-      - 任务分发
-      - 路由
+    - 模型选择
+    - 路由模型
+    - 切换模型
+    - 用哪个模型
+    - model router
+    - model select
+    - 选择模型
+    - 模型切换
+    - 模型路由
+    - 任务分级
+    - 模型分配
 ---
 
 # Model Router
@@ -336,3 +342,17 @@ cron:
 ## Reference Files
 
 - `scripts/call_vibe.py` — 通用调用函数，可被 cron 和 delegate_task 直接使用
+## 适用场景
+
+### 入口条件
+
+- 相关场景触发词被命中
+- 用户明确提出了该技能覆盖的问题
+- 系统状态满足前置条件
+
+### 出口条件
+
+- 问题已解决或结论已输出
+- 所有必要的操作已完成
+- 结果已向用户报告
+

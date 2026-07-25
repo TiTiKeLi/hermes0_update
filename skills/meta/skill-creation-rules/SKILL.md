@@ -9,12 +9,16 @@ platforms: [linux]
 related_skills: [memory-compactor, external-adaptor, secure-download, github-discover]
 triggers:
   keywords:
-      - 创建技能
-      - skill_manage
-      - 注册技能
-      - 新技能
-      - 新增skill
-      - 创建skill
+    - 创建技能
+    - 新技能
+    - 技能规则
+    - skill create
+    - create skill
+    - skill rules
+    - 技能模板
+    - 技能结构
+    - 技能注册
+    - SKILL.md
   tools:
       - skill_manage
 ---
@@ -71,8 +75,12 @@ triggers:
 ### 1.1 边界条件（BOUNDARIES）
 
 ```
-### 入口条件（必须全部满足）
-- [ ] ...
+### 入口条件
+
+- 需要创建新技能
+ - 需要更新现有技能
+ - 技能结构需要检查
+
 ### 跳过条件（一条即跳过）
 - [ ] ...
 ### 中止条件（执行中，一条即停）
@@ -290,4 +298,10 @@ assert "<新技能名>" in result["content"], "registry 更新失败"
 - ❌ 创建超过 300 行的 skill（太长 → 拆引用）
 - ❌ 创建后不更新 SKILL_REGISTRY
 - ❌ 删除 skill 后不清除 registry 条目（标记 status: merged:<target> 或 status: deprecated）
+
+### 出口条件
+
+- 问题已解决或结论已输出
+- 所有必要的操作已完成
+- 结果已向用户报告
 

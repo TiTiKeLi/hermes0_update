@@ -10,14 +10,17 @@ platforms: [linux]
 related_skills: [hierarchical-memory-sync, hermes-optimization]
 triggers:
   keywords:
-      - 记忆压缩
-      - 压缩
-      - memory compact
-      - 归档
-      - archive
-      - MEMORY.md
-  tool_calls:
-      - memory
+    - 压缩记忆
+    - 记忆压缩
+    - 合并记忆
+    - 清理记忆
+    - 记忆精简
+    - compact memory
+    - memory compact
+    - 记忆合并
+    - 减少记忆
+    - 去重
+    - dedup
 ---
 
 # Memory Compactor v5 — 归档 + 钩子模式
@@ -183,3 +186,17 @@ python3 /opt/data/scripts/memory_compactor_v2.py
 9. **正则不匹配连字符标签** — `\w+` 不匹配 `audio-vector-system` 或 `memory-confirmation-feedback`。必须用 `[^\]]+` 来匹配 tag。2026-07-25 修复：`ID_PATTERN = r'^id:(\d+)\s+\[([^\]]+)\]\s*(.*)'`
 10. **id:N [tag] 两种格式并存** — MEMORY.md 中事实同时存在 `id:N [tag] content` 和 `- 描述 (id:N [tag])` 两种格式。解析器必须同时支持两种，且去重时需跨格式比较。
 11. **记忆同步 cron 持续追加** — `hierarchical-memory-sync` 每小时从 fact_store 追加重复 id 行到文件尾部。压缩器的去重是唯一的清理手段，必须每次运行都执行。
+## 适用场景
+
+### 入口条件
+
+- 相关场景触发词被命中
+- 用户明确提出了该技能覆盖的问题
+- 系统状态满足前置条件
+
+### 出口条件
+
+- 问题已解决或结论已输出
+- 所有必要的操作已完成
+- 结果已向用户报告
+
