@@ -305,3 +305,30 @@
   last_updated: 2026-07-25
   created_by: manual
   description: 用户偏好学习 — 从交互中自动提取偏好/习惯/反模式，动态更新 USER.md
+
+- name: project-lifecycle
+  status: active
+  category: workflow
+  related: ux-audit;dependency-tracker;quality-gates;error-recovery;task-prioritization;verification-before-completion;meta-orchestrator
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: 项目全生命周期管理 — UX预期→功能审计→差距分析→实施→验证→UX验证→部署→复盘沉淀，八阶段闭环
+
+- name: ux-audit
+  status: active
+  category: workflow
+  related: project-lifecycle;verification-before-completion;quality-gates
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: UX审计 — 定义用户体验预期、逐项审计功能覆盖、打分追踪、差距分级
+
+- name: dependency-tracker
+  status: active
+  category: workflow
+  related: project-lifecycle;config-unification;quality-gates
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: 依赖追踪 — 功能/模块之间的依赖关系图、修改影响范围分析、A→B连锁反应预测
