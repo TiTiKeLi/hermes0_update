@@ -95,3 +95,9 @@ config.yaml.corrupt*
 bin/
 
 cron/output/
+# === 运行时状态 ===
+cron/ticker_*
+research/heartbeat_last.json
+
+# === 测试文件 ===
+test_embed.py
