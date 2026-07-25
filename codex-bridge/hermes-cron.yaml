@@ -1,0 +1,4 @@
+description: Hermes Codex Bridge — 检查 Codex 响应
+cron: "*/2 * * * *"
+command: pwsh -NoProfile /opt/data/scripts/send-to-codex.ps1
+enabled: true
