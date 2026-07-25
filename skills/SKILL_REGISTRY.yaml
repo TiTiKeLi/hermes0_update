@@ -224,3 +224,39 @@
   last_updated: 2026-07-25
   created_by: auto
   description: 并行分派智能体 — 每个独立问题域分派一个子智能体，并发工作，不共享状态
+
+- name: git-version-control
+  status: active
+  category: workflow
+  related: config-unification;skill-creation-rules
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: manual
+  description: Hermes Git 版本管理 — 数据分类、排除规则、定时同步、仓库审计
+
+- name: error-recovery
+  status: active
+  category: workflow
+  related: verification-before-completion;meta-orchestrator
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: manual
+  description: 错误恢复框架 — 工具/技能执行失败时的系统化重试、降级、升级策略
+
+- name: task-prioritization
+  status: active
+  category: workflow
+  related: meta-orchestrator;dispatching-parallel-agents;error-recovery
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: manual
+  description: 任务优先级框架 — 多任务并发时的排序依据、紧急度矩阵、用户偏好权重
+
+- name: health-monitor
+  status: active
+  category: workflow
+  related: error-recovery;network-repair;hermes-optimization
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: manual
+  description: 系统健康监控 — 组件级健康检查、趋势追踪、自动恢复触发
