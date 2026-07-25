@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hermes</title>
+<style>
+:root {
+  --bg: #0d1117; --bg-secondary: #161b22; --bg-tertiary: #1c2128;
+  --border: #30363d; --border-light: #21262d;
+  --text: #e6edf3; --text-secondary: #8b949e; --text-tertiary: #6e7681;
+  --accent: #58a6ff; --accent-bg: rgba(56,139,253,.1); --accent-hover: rgba(56,139,253,.15);
+  --green: #3fb950; --red: #f85149; --yellow: #d29922; --purple: #bc8cff;
+  --radius: 8px; --radius-lg: 12px;
+  --shadow: 0 2px 8px rgba(0,0,0,.2);
+  --sidebar-w: 260px; --header-h: 52px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system,'SF Pro Display','PingFang SC','Microsoft YaHei',sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--text-tertiary); }
+
+/* ===== Layout ===== */
+.app { display:flex; height:100vh; }
+.sidebar { width:var(--sidebar-w); background:var(--bg-secondary); border-right:1px solid var(--border); display:flex; flex-direction:column; flex-shrink:0; }
+.main { flex:1; display:flex; flex-direction:column; min-width:0; }
+.preview { width:360px; background:var(--bg-secondary); border-left:1px solid var(--border); display:none; flex-direction:column; flex-shrink:0; }
+.preview.open { display:flex; }
+
+/* ===== Sidebar ===== */
+.sidebar-header { padding:12px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; height:var(--header-h); }
+.sidebar-header .logo { width:32px; height:32px; background:linear-gradient(135deg,var(--accent),var(--purple)); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; color:#fff; }
+.sidebar-header .title { font-size:14px; font-weight:600; }
+.sidebar-header .version { font-size:11px; color:var(--text-tertiary); }
+.sidebar-nav { padding:8px; }
+.nav-btn { width:100%; padding:8px 12px; border:none; background:transparent; color:var(--text-secondary); font-size:13px; border-radius:6px; cursor:pointer; display:flex; align-items:center; gap:8px; transition:.1s; text-align:left; }
+.nav-btn:hover { background:var(--border); color:var(--text); }
+.nav-btn.active { background:var(--accent-bg); color:var(--accent); }
+.nav-btn .icon { width:18px; text-align:center; font-size:14px; }
+.nav-section { font-size:11px; color:var(--text-tertiary); padding:12px 12px 4px; text-transform:uppercase; letter-spacing:.5px; font-weight:500; }
+.sessions-list { flex:1; overflow-y:auto; padding:0 8px 8px; }
+.session-item { padding:8px 10px; border-radius:6px; cursor:pointer; margin-bottom:2px; transition:.1s; }
+.session-item:hover { background:var(--border); }
+.session-item.active { background:var(--accent-bg); }
+.session-item .session-title { font-size:13px; font-weight:500; margin-bottom:2px; display:flex; align-items:center; gap:6px; }
+.session-item .session-meta { font-size:11px; color:var(--text-tertiary); display:flex; gap:8px; }
+.session-item .session-preview { font-size:12px; color:var(--text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; margin-top:4px; }
+.sidebar-footer { padding:12px 16px; border-top:1px solid var(--border); }
+.sidebar-footer .status { font-size:11px; color:var(--text-tertiary); display:flex; align-items:center; gap:6px; }
+.sidebar-footer .dot { width:6px; height:6px; border-radius:50%; background:var(--green); }
+
+/* ===== Header ===== */
+.header { height:var(--header-h); padding:0 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; background:var(--bg-secondary); }
+.header-left { display:flex; align-items:center; gap:12px; }
+.header-title { font-size:14px; font-weight:500; }
+.header-badge { font-size:10px; padding:2px 8px; border-radius:10px; background:rgba(63,185,80,.15); color:var(--green); }
+.header-right { display:flex; align-items:center; gap:8px; }
+.header-btn { padding:6px 10px; border:1px solid var(--border); background:var(--bg); color:var(--text-secondary); border-radius:6px; cursor:pointer; font-size:12px; display:flex; align-items:center; gap:4px; transition:.1s; }
+.header-btn:hover { border-color:var(--accent); color:var(--text); }
+.model-select { padding:5px 10px; border:1px solid var(--border); background:var(--bg); color:var(--text); border-radius:6px; font-size:12px; cursor:pointer; outline:none; }
+.model-select:focus { border-color:var(--accent); }
+
+/* ===== Content ===== */
+.content { flex:1; overflow-y:auto; padding:20px; min-height:0; display:flex; flex-direction:column; }
+.content > .view { flex:1; display:flex; flex-direction:column; min-height:0; }
+.content-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.content-title { font-size:16px; font-weight:600; display:flex; align-items:center; gap:8px; }
+.content-subtitle { font-size:12px; color:var(--text-tertiary); }
+.card { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius); padding:14px; margin-bottom:8px; transition:.1s; }
+.card:hover { border-color:var(--border-light); }
+.card-clickable { cursor:pointer; }
+.card-clickable:hover { border-color:var(--accent); }
+
+/* ===== Status Grid ===== */
+.status-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px; }
+.status-card { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius); padding:12px 14px; }
+.status-label { font-size:11px; color:var(--text-tertiary); margin-bottom:4px; display:flex; align-items:center; gap:4px; }
+.status-value { font-size:14px; font-weight:600; display:flex; align-items:center; gap:6px; }
+.status-sub { font-size:11px; color:var(--text-tertiary); margin-top:2px; }
+.dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+.dot.green { background:var(--green); }
+.dot.red { background:var(--red); }
+.dot.yellow { background:var(--yellow); }
+
+/* ===== Memory Grid ===== */
+.mem-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
+.mem-card { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius); padding:14px; cursor:pointer; transition:.1s; }
+.mem-card:hover { border-color:var(--accent); }
+.mem-card .icon { font-size:20px; margin-bottom:8px; }
+.mem-card .title { font-size:12px; color:var(--text-tertiary); margin-bottom:4px; }
+.mem-card .preview { font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* ===== Chat ===== */
+.chat-container { display:flex; flex-direction:column; height:100%; }
+.chat-messages { flex:1; overflow-y:auto; padding:16px 0; min-height:0; }
+.chat-msg { display:flex; gap:10px; margin-bottom:16px; padding:0 4px; }
+.chat-msg.user { flex-direction:row-reverse; }
+.chat-avatar { width:32px; height:32px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; }
+.chat-msg.user .chat-avatar { background:var(--accent-bg); color:var(--accent); }
+.chat-msg.bot .chat-avatar { background:var(--border); color:var(--text); }
+.chat-bubble { max-width:75%; background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-lg); padding:10px 14px; font-size:13px; line-height:1.6; }
+.chat-msg.user .chat-bubble { background:var(--accent-bg); border-color:rgba(56,139,253,.2); }
+.chat-time { font-size:10px; color:var(--text-tertiary); margin-top:4px; }
+.chat-input-area { padding:12px 0 0; border-top:1px solid var(--border); }
+.chat-input-row { display:flex; gap:8px; align-items:flex-end; }
+.chat-input { flex:1; padding:10px 14px; border:1px solid var(--border); background:var(--bg); color:var(--text); border-radius:var(--radius); font-size:13px; outline:none; resize:none; min-height:42px; max-height:120px; font-family:inherit; line-height:1.5; }
+.chat-input:focus { border-color:var(--accent); }
+.chat-send { padding:10px 16px; background:var(--accent); color:#fff; border:none; border-radius:var(--radius); cursor:pointer; font-size:13px; font-weight:500; transition:.1s; white-space:nowrap; }
+.chat-send:hover { opacity:.9; }
+.chat-send:disabled { opacity:.5; cursor:not-allowed; }
+
+/* ===== Skills ===== */
+.skill-filters { display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; }
+.skill-filter { padding:4px 10px; border:1px solid var(--border); background:transparent; color:var(--text-secondary); border-radius:12px; cursor:pointer; font-size:11px; transition:.1s; }
+.skill-filter:hover { border-color:var(--accent); color:var(--text); }
+.skill-filter.active { background:var(--accent-bg); border-color:var(--accent); color:var(--accent); }
+.skill-card { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius); padding:12px 14px; margin-bottom:6px; cursor:pointer; transition:.1s; border-left:3px solid transparent; }
+.skill-card:hover { border-color:var(--accent); }
+.skill-card .skill-name { font-size:13px; font-weight:600; margin-bottom:4px; display:flex; align-items:center; gap:6px; }
+.skill-card .skill-desc { font-size:12px; color:var(--text-secondary); line-height:1.4; margin-bottom:6px; }
+.skill-card .skill-meta { font-size:10px; color:var(--text-tertiary); display:flex; gap:8px; flex-wrap:wrap; }
+.skill-tag { padding:2px 6px; border-radius:4px; font-size:10px; }
+
+/* ===== Sessions ===== */
+.session-detail { height:100%; display:flex; flex-direction:column; }
+.session-messages { flex:1; overflow-y:auto; padding:16px 0; }
+
+/* ===== Preview Panel ===== */
+.preview-header { height:var(--header-h); padding:0 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.preview-title { font-size:13px; font-weight:500; }
+.preview-close { border:none; background:transparent; color:var(--text-tertiary); cursor:pointer; font-size:16px; padding:4px; }
+.preview-close:hover { color:var(--text); }
+.preview-body { flex:1; overflow-y:auto; padding:16px; font-size:13px; line-height:1.6; }
+.preview-body pre { font-family:'Cascadia Code','Fira Code',monospace; font-size:12px; white-space:pre-wrap; word-break:break-all; background:var(--bg); padding:10px; border-radius:6px; overflow-x:auto; max-height:none; }
+
+/* ===== Command Palette ===== */
+.cmd-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:200; align-items:flex-start; justify-content:center; padding-top:20vh; }
+.cmd-overlay.open { display:flex; }
+.cmd-box { background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius-lg); width:520px; max-height:400px; display:flex; flex-direction:column; box-shadow:0 16px 48px rgba(0,0,0,.4); }
+.cmd-input { padding:12px 16px; border:none; background:transparent; color:var(--text); font-size:14px; outline:none; border-bottom:1px solid var(--border); }
+.cmd-input::placeholder { color:var(--text-tertiary); }
+.cmd-list { flex:1; overflow-y:auto; padding:8px; }
+.cmd-item { padding:8px 12px; border-radius:6px; cursor:pointer; display:flex; align-items:center; gap:10px; transition:.05s; }
+.cmd-item:hover, .cmd-item.active { background:var(--accent-bg); }
+.cmd-item .cmd-icon { width:20px; text-align:center; color:var(--text-tertiary); }
+.cmd-item .cmd-label { font-size:13px; }
+.cmd-item .cmd-shortcut { font-size:11px; color:var(--text-tertiary); margin-left:auto; }
+
+/* ===== Toast ===== */
+.toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); padding:8px 16px; border-radius:6px; background:var(--bg-secondary); border:1px solid var(--border); font-size:13px; display:none; z-index:999; box-shadow:var(--shadow); }
+.toast.show { display:block; animation:fadeIn .2s; }
+@keyframes fadeIn { from{opacity:0;transform:translateX(-50%) translateY(8px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+
+/* ===== Spinner ===== */
+.spinner { display:inline-block; width:14px; height:14px; border:2px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin .6s linear infinite; vertical-align:middle; margin-right:6px; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* ===== Responsive ===== */
+@media(max-width:900px) {
+  .sidebar { width:56px; }
+  .sidebar .nav-label, .sidebar-header .title, .sidebar-header .version, .sidebar-footer, .nav-section, .sessions-list { display:none; }
+  .sidebar-header { justify-content:center; padding:12px 0; }
+  .nav-btn { justify-content:center; padding:8px; }
+  .preview { display:none !important; }
+  .status-grid { grid-template-columns:repeat(2,1fr); }
+  .mem-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">H</div>
+      <div>
+        <div class="title">Hermes</div>
+        <div class="version" id="versionInfo">v0.18.2</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-btn active" onclick="switchView('chat')" data-view="chat"><span class="icon">💬</span><span class="nav-label">对话</span></button>
+      <button class="nav-btn" onclick="switchView('overview')" data-view="overview"><span class="icon">📊</span><span class="nav-label">概览</span></button>
+      <button class="nav-btn" onclick="switchView('memory')" data-view="memory"><span class="icon">🧠</span><span class="nav-label">记忆</span></button>
+      <button class="nav-btn" onclick="switchView('skills')" data-view="skills"><span class="icon">🧩</span><span class="nav-label">技能</span></button>
+      <button class="nav-btn" onclick="switchView('config')" data-view="config"><span class="icon">⚙️</span><span class="nav-label">配置</span></button>
+      <button class="nav-btn" onclick="switchView('search')" data-view="search"><span class="icon">🔍</span><span class="nav-label">语义搜索</span></button>
+      <button class="nav-btn" onclick="switchView('logs')" data-view="logs"><span class="icon">📋</span><span class="nav-label">日志</span></button>
+      <div class="nav-section nav-label">会话</div>
+    </nav>
+    <div class="sessions-list nav-label" id="sessionsList"></div>
+    <div class="sidebar-footer">
+      <div class="status"><span class="dot" id="footerDot"></span><span id="footerStatus">检查中...</span></div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="header">
+      <div class="header-left">
+        <span class="header-title" id="viewTitle">对话</span>
+        <span class="header-badge" id="headerBadge">● OK</span>
+      </div>
+      <div class="header-right">
+        <select class="model-select" id="modelSelect" onchange="switchModel(this.value)">
+          <option value="">加载中...</option>
+        </select>
+        <button class="header-btn" onclick="openCmdPalette()" title="命令面板 (Ctrl+K)">⌘K</button>
+        <button class="header-btn" onclick="togglePreview()" title="预览面板">◧</button>
+        <button class="header-btn" onclick="refreshAll()" title="刷新">⟳</button>
+      </div>
+    </div>
+    <div class="content" id="mainContent">
+      <!-- Chat View (default) -->
+      <div class="view active" id="view-chat" style="display:flex;flex-direction:column;flex:1">
+        <div class="chat-container" style="flex:1;display:flex;flex-direction:column;min-height:0">
+          <div class="chat-messages" id="chatMessages" style="flex:1;overflow-y:auto;min-height:0">
+            <div class="chat-msg bot">
+              <div class="chat-avatar">H</div>
+              <div>
+                <div class="chat-bubble">Hermes 就绪。输入消息开始对话。</div>
+                <div class="chat-time">刚刚</div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-input-area" style="flex-shrink:0;padding-top:12px;border-top:1px solid var(--border)">
+            <div class="chat-input-row" style="display:flex;gap:8px;align-items:flex-end">
+              <textarea class="chat-input" id="chatInput" placeholder="输入消息... (Enter 发送, Shift+Enter 换行)" rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)" style="flex:1;padding:10px 14px;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:var(--radius);font-size:13px;outline:none;resize:none;min-height:42px;max-height:120px;font-family:inherit;line-height:1.5"></textarea>
+              <button class="chat-send" id="chatSend" onclick="sendChat()" style="padding:10px 16px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);cursor:pointer;font-size:13px;font-weight:500;transition:.1s;white-space:nowrap;flex-shrink:0">发送</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Overview View -->
+      <div class="view" id="view-overview" style="display:none"></div>
+      <!-- Memory View -->
+      <div class="view" id="view-memory" style="display:none"></div>
+      <!-- Skills View -->
+      <div class="view" id="view-skills" style="display:none"></div>
+      <!-- Config View -->
+      <div class="view" id="view-config" style="display:none"></div>
+      <!-- Search View -->
+      <div class="view" id="view-search" style="display:none">
+        <div class="content-header">
+          <div><div class="content-title">🔍 语义搜索</div><div class="content-subtitle">基于 Ollama nomic-embed-text 的向量相似度搜索</div></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:16px">
+          <input type="text" id="searchInput" placeholder="输入搜索内容..." style="flex:1;padding:10px 14px;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:var(--radius);font-size:13px;outline:none" onkeydown="if(event.key==='Enter')doSearch()">
+          <button class="chat-send" onclick="doSearch()">搜索</button>
+          <button class="header-btn" onclick="syncEmbeddings()">同步嵌入</button>
+        </div>
+        <div id="searchResults"></div>
+      </div>
+      <!-- Logs View -->
+      <div class="view" id="view-logs" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- Preview Panel -->
+  <aside class="preview" id="previewPanel">
+    <div class="preview-header">
+      <span class="preview-title" id="previewTitle">详情</span>
+      <button class="preview-close" onclick="togglePreview()">✕</button>
+    </div>
+    <div class="preview-body" id="previewBody"></div>
+  </aside>
+</div>
+
+<!-- Command Palette -->
+<div class="cmd-overlay" id="cmdOverlay" onclick="if(event.target===this)closeCmdPalette()">
+  <div class="cmd-box">
+    <input class="cmd-input" id="cmdInput" placeholder="输入命令..." oninput="filterCmds(this.value)" onkeydown="handleCmdKey(event)">
+    <div class="cmd-list" id="cmdList"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== State =====
+let currentView = 'chat';
+let currentSession = null;
+let sessionsCache = [];
+let skillsCache = [];
+let statusCache = {};
+
+// ===== Views =====
+function switchView(name) {
+  currentView = name;
+  document.querySelectorAll('.view').forEach(v => {
+    v.style.display = 'none';
+    v.style.flex = 'none';
+  });
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const view = document.getElementById('view-' + name);
+  if (view) {
+    view.style.display = name === 'chat' ? 'flex' : 'block';
+    if (name === 'chat') {
+      view.style.flexDirection = 'column';
+      view.style.flex = '1';
+    }
+  }
+  document.querySelector(`.nav-btn[data-view="${name}"]`)?.classList.add('active');
+  const titles = { chat:'对话', overview:'概览', memory:'记忆', skills:'技能', config:'配置', search:'语义搜索', logs:'日志' };
+  document.getElementById('viewTitle').textContent = titles[name] || name;
+  if (name === 'overview') renderOverview();
+  if (name === 'memory') renderMemory();
+  if (name === 'skills') renderSkills();
+  if (name === 'config') renderConfig();
+  if (name === 'logs') renderLogs();
+  if (name === 'chat') loadSessions();
+}
+
+// ===== API =====
+async function api(url, opts={}) {
+  try {
+    const r = await fetch(url, opts);
+    return r.headers.get('content-type')?.includes('json') ? r.json() : r.text();
+  } catch(e) { return null; }
+}
+
+// ===== Overview =====
+async function renderOverview() {
+  const d = await api('/api/status');
+  if (!d) return;
+  statusCache = d;
+  const allOk = d.gateway === 'running' && d.wechat === 'connected';
+  document.getElementById('headerBadge').textContent = allOk ? '● OK' : '● WARN';
+  document.getElementById('headerBadge').style.background = allOk ? 'rgba(63,185,80,.15)' : 'rgba(210,153,34,.15)';
+  document.getElementById('headerBadge').style.color = allOk ? 'var(--green)' : 'var(--yellow)';
+  document.getElementById('footerDot').className = 'dot ' + (allOk ? 'green' : 'red');
+  document.getElementById('footerStatus').textContent = allOk ? '运行正常' : '需要关注';
+  const mem = await api('/api/memory');
+  const health = await api('/api/health');
+  const el = document.getElementById('view-overview');
+  el.innerHTML = `
+    <div class="content-header">
+      <div><div class="content-title">📊 系统概览</div><div class="content-subtitle">Hermes Gateway 运行状态</div></div>
+    </div>
+    <div class="status-grid">
+      <div class="status-card"><div class="status-label">Gateway</div><div class="status-value"><span class="dot ${d.gateway==='running'?'green':'red'}"></span>${d.gateway||'—'}</div><div class="status-sub">${d.uptime?'运行 '+d.uptime:''}</div></div>
+      <div class="status-card"><div class="status-label">微信</div><div class="status-value"><span class="dot ${d.wechat==='connected'?'green':'red'}"></span>${d.wechat||'—'}</div><div class="status-sub">${d.wechat_account||''}</div></div>
+      <div class="status-card"><div class="status-label">Ollama</div><div class="status-value"><span class="dot ${d.ollama==='reachable'?'green':'red'}"></span>${d.ollama||'—'}</div><div class="status-sub">${(d.ollama_models||[]).join(', ')||'无模型'}</div></div>
+      <div class="status-card"><div class="status-label">默认模型</div><div class="status-value">${d.model||'—'}</div><div class="status-sub">${d.provider||'—'}</div></div>
+    </div>
+    <div class="content-title" style="margin-bottom:12px">🧠 记忆</div>
+    <div class="mem-grid">
+      <div class="mem-card" onclick="showPreview('用户画像','${esc((mem?.user_md||'').slice(0,500))}')">
+        <div class="icon">👤</div><div class="title">用户画像</div>
+        <div class="preview">${esc(memText(mem?.user_md))}</div>
+      </div>
+      <div class="mem-card" onclick="showPreview('系统记忆','${esc((mem?.agent_md||'').slice(0,500))}')">
+        <div class="icon">🤖</div><div class="title">系统记忆</div>
+        <div class="preview">${esc(memText(mem?.agent_md))}</div>
+      </div>
+      <div class="mem-card" onclick="showPreview('结构化事实','${esc((mem?.facts||[]).slice(0,3).join('\\n'))}')">
+        <div class="icon">📌</div><div class="title">结构化事实</div>
+        <div class="preview">${(mem?.facts||[]).length ? esc(mem.facts[0].slice(0,40))+'…' : '空'}</div>
+      </div>
+    </div>
+    <div class="content-title" style="margin-bottom:12px">📋 健康检查</div>
+    <div class="card" style="font-size:13px">
+      ${health ? [
+        ['Gateway', health.gateway==='ok'],
+        ['微信', health.wechat==='connected'],
+        ['记忆数据库', health.memory_store],
+        ['skills/ 目录', health.skills_dir],
+        ['config.yaml', health.config_exists]
+      ].map(([k,v]) => `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)"><span>${k}</span><span><span class="dot ${v?'green':'red'}"></span> ${v?'✓':'✗'}</span></div>`).join('') : '<div class="empty-state">加载失败</div>'}
+    </div>`;
+}
+
+// ===== Memory =====
+async function renderMemory() {
+  const d = await api('/api/memory');
+  if (!d) return;
+  const el = document.getElementById('view-memory');
+  el.innerHTML = `
+    <div class="content-header">
+      <div><div class="content-title">🧠 记忆管理</div><div class="content-subtitle">USER.md · MEMORY.md · SOUL.md · 结构化事实</div></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <button class="skill-filter active" onclick="showMemTab('user',this)">USER.md</button>
+      <button class="skill-filter" onclick="showMemTab('agent',this)">MEMORY.md</button>
+      <button class="skill-filter" onclick="showMemTab('soul',this)">SOUL.md</button>
+      <button class="skill-filter" onclick="showMemTab('facts',this)">结构化事实</button>
+    </div>
+    <div class="card"><pre id="memContent" style="max-height:60vh;white-space:pre-wrap">${esc(d.user_md||'(空)')}</pre></div>`;
+}
+function showMemTab(tab, btn) {
+  document.querySelectorAll('#view-memory .skill-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  api('/api/memory').then(d => {
+    const content = tab === 'user' ? d.user_md : tab === 'agent' ? d.agent_md : tab === 'soul' ? d.soul : (d.facts||[]).join('\n\n---\n\n');
+    document.getElementById('memContent').textContent = content || '(空)';
+  });
+}
+
+// ===== Skills =====
+async function renderSkills() {
+  skillsCache = await api('/api/skills') || [];
+  const el = document.getElementById('view-skills');
+  const cats = [...new Set(skillsCache.map(s => s.category || 'other'))];
+  el.innerHTML = `
+    <div class="content-header">
+      <div><div class="content-title">🧩 技能库 <span class="content-subtitle">${skillsCache.length} 个技能</span></div></div>
+    </div>
+    <div class="skill-filters" id="skillFilters">
+      <button class="skill-filter active" onclick="filterSkills('all',this)">全部</button>
+      ${cats.map(c => `<button class="skill-filter" onclick="filterSkills('${c}',this)">${catLabel(c)}</button>`).join('')}
+    </div>
+    <div id="skillGrid"></div>`;
+  filterSkills('all', document.querySelector('#skillFilters .skill-filter'));
+}
+function filterSkills(cat, btn) {
+  document.querySelectorAll('#skillFilters .skill-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = cat === 'all' ? skillsCache : skillsCache.filter(s => (s.category||'other') === cat);
+  const grid = document.getElementById('skillGrid');
+  const catColors = { workflow:'#58a6ff', memory:'#3fb950', behavior:'#d29922', security:'#f85149', thinking:'#bc8cff', architecture:'#8b949e', meta:'#f0883e', system:'#8b949e' };
+  grid.innerHTML = filtered.map(s => {
+    const c = catColors[s.category] || 'var(--text-tertiary)';
+    const desc = (s.description||'').slice(0,120);
+    return `<div class="skill-card" style="border-left-color:${c}" onclick="showSkillDetail('${esc(s.name)}')">
+      <div class="skill-name"><span>${s.name}</span><span class="skill-tag" style="background:${c}22;color:${c}">${catLabel(s.category)}</span></div>
+      <div class="skill-desc">${esc(desc)}${desc.length>=120?'...':''}</div>
+      <div class="skill-meta">
+        ${s.status?`<span>${s.status}</span>`:''}
+        ${s.created?`<span>创建: ${s.created}</span>`:''}
+        ${(s.related_skills||[]).length?`<span>→ ${(s.related_skills||[]).slice(0,2).join(', ')}</span>`:''}
+      </div>
+    </div>`;
+  }).join('') || '<div class="empty-state">暂无技能</div>';
+}
+function showSkillDetail(name) {
+  const s = skillsCache.find(x => x.name === name);
+  if (!s) return;
+  const catColors = { workflow:'#58a6ff', memory:'#3fb950', behavior:'#d29922', security:'#f85149', thinking:'#bc8cff', architecture:'#8b949e', meta:'#f0883e', system:'#8b949e' };
+  const c = catColors[s.category] || 'var(--text-tertiary)';
+  showPreview('🧩 ' + s.name, `
+    <div style="margin-bottom:12px;display:flex;gap:6px;flex-wrap:wrap">
+      <span class="skill-tag" style="background:${c}22;color:${c}">${catLabel(s.category)}</span>
+      <span class="skill-tag" style="background:var(--border);color:var(--text-secondary)">${s.status||'active'}</span>
+      ${s.platforms?.length?`<span class="skill-tag" style="background:var(--border);color:var(--text-secondary)">🌐 ${s.platforms.join(', ')}</span>`:''}
+    </div>
+    <div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:600;color:var(--accent);margin-bottom:6px">⚡ 触发关键词</div>
+      <div style="background:var(--bg);padding:10px 12px;border-radius:6px;font-size:13px;border-left:3px solid var(--accent)">${esc(s.description||'无')}</div>
+    </div>
+    ${(s.related_skills||[]).filter(Boolean).length?`
+    <div style="margin-bottom:14px">
+      <div style="font-size:12px;font-weight:600;margin-bottom:6px">🔗 关联技能</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">${s.related_skills.filter(Boolean).map(r=>`<span class="skill-tag" style="background:var(--accent-bg);color:var(--accent);cursor:pointer" onclick="showSkillDetail('${r}')">${r}</span>`).join('')}</div>
+    </div>`:''}
+    <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:8px">📁 ${s.path||'?'}</div>
+    <details open><summary style="cursor:pointer;font-size:12px;font-weight:500;margin-bottom:8px">📄 SKILL.md</summary><pre style="font-size:11px;line-height:1.5">${esc(s.content||'')}</pre></details>
+  `);
+}
+
+// ===== Config =====
+async function renderConfig() {
+  const c = await api('/api/config');
+  document.getElementById('view-config').innerHTML = `
+    <div class="content-header"><div class="content-title">⚙️ 配置</div></div>
+    <div class="card"><pre style="max-height:70vh;white-space:pre-wrap">${esc(c||'加载失败')}</pre></div>`;
+}
+
+// ===== Logs =====
+async function renderLogs() {
+  document.getElementById('view-logs').innerHTML = `
+    <div class="content-header"><div class="content-title">📋 日志</div><button class="header-btn" onclick="renderLogs()">⟳ 刷新</button></div>
+    <div class="card"><pre style="max-height:70vh;white-space:pre-wrap">加载中...</pre></div>`;
+  const l = await api('/api/logs');
+  document.querySelector('#view-logs pre').textContent = l || '(无日志)';
+}
+
+// ===== Sessions =====
+async function loadSessions() {
+  sessionsCache = await api('/api/sessions') || [];
+  const el = document.getElementById('sessionsList');
+  el.innerHTML = sessionsCache.slice(0, 20).map(s => `
+    <div class="session-item ${currentSession===s.id?'active':''}" onclick="openSession('${s.id}')">
+      <div class="session-title">${s.platform==='weixin'?'💬':'📱'} <span>${s.platform||'会话'}</span></div>
+      <div class="session-meta"><span>${(s.updated||'').slice(5,16).replace('T',' ')}</span><span>${s.msg_count||0} 条</span></div>
+      <div class="session-preview">${esc(s.preview||'(空)')}</div>
+    </div>`).join('') || '<div style="padding:12px;color:var(--text-tertiary);font-size:12px;text-align:center">暂无会话</div>';
+}
+async function openSession(id) {
+  currentSession = id;
+  loadSessions();
+  const d = await api('/api/session/' + id);
+  if (!d || d.error) return;
+  const msgs = d.messages || [];
+  // Switch to chat view
+  currentView = 'chat';
+  document.querySelectorAll('.view').forEach(v => {
+    v.style.display = 'none';
+    v.style.flex = 'none';
+  });
+  const chatView = document.getElementById('view-chat');
+  chatView.style.display = 'flex';
+  chatView.style.flexDirection = 'column';
+  chatView.style.flex = '1';
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.nav-btn[data-view="chat"]').classList.add('active');
+  document.getElementById('viewTitle').textContent = '对话 · ' + (d.meta?.platform || id.slice(0,12));
+  const box = document.getElementById('chatMessages');
+  box.innerHTML = msgs.map(m => {
+    const isUser = m.role === 'user';
+    const time = (m.timestamp||'').slice(11,19) || '';
+    return `<div class="chat-msg ${isUser?'user':'bot'}">
+      <div class="chat-avatar">${isUser?'U':'H'}</div>
+      <div><div class="chat-bubble">${esc(m.content||'').replace(/\n/g,'<br>')}</div><div class="chat-time">${time}</div></div>
+    </div>`;
+  }).join('');
+  box.scrollTop = box.scrollHeight;
+  // Ensure input is visible
+  setTimeout(() => {
+    const input = document.getElementById('chatInput');
+    if (input) input.focus();
+  }, 100);
+}
+
+// ===== Chat =====
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+}
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = 'auto';
+  const box = document.getElementById('chatMessages');
+  const now = new Date().toLocaleTimeString();
+  box.innerHTML += `<div class="chat-msg user"><div class="chat-avatar">U</div><div><div class="chat-bubble">${esc(text)}</div><div class="chat-time">${now}</div></div></div>`;
+  const id = 'resp-' + Date.now();
+  box.innerHTML += `<div class="chat-msg bot" id="${id}"><div class="chat-avatar">H</div><div><div class="chat-bubble"><span class="spinner"></span>思考中...</div></div></div>`;
+  box.scrollTop = box.scrollHeight;
+  document.getElementById('chatSend').disabled = true;
+  try {
+    const d = await api('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({prompt:text}) });
+    const el = document.getElementById(id);
+    if (el) el.querySelector('.chat-bubble').innerHTML = (d?.response||'(空)').replace(/\n/g,'<br>');
+  } catch(e) {
+    const el = document.getElementById(id);
+    if (el) el.querySelector('.chat-bubble').textContent = '请求失败: ' + e.message;
+  }
+  document.getElementById('chatSend').disabled = false;
+  box.scrollTop = box.scrollHeight;
+}
+
+// ===== Preview Panel =====
+function togglePreview() {
+  document.getElementById('previewPanel').classList.toggle('open');
+}
+function showPreview(title, content) {
+  document.getElementById('previewTitle').textContent = title;
+  document.getElementById('previewBody').innerHTML = `<pre style="white-space:pre-wrap">${content}</pre>`;
+  document.getElementById('previewPanel').classList.add('open');
+}
+
+// ===== Model Select =====
+async function loadModels() {
+  const d = await api('/api/status');
+  if (!d) return;
+  const sel = document.getElementById('modelSelect');
+  sel.innerHTML = `<option value="${d.model||''}">${d.model||'未知'} (${d.provider||''})</option>`;
+}
+
+// ===== Command Palette =====
+const commands = [
+  { icon:'💬', label:'对话', action:()=>switchView('chat'), shortcut:'' },
+  { icon:'📊', label:'概览', action:()=>switchView('overview'), shortcut:'' },
+  { icon:'🧠', label:'记忆', action:()=>switchView('memory'), shortcut:'' },
+  { icon:'🧩', label:'技能', action:()=>switchView('skills'), shortcut:'' },
+  { icon:'⚙️', label:'配置', action:()=>switchView('config'), shortcut:'' },
+  { icon:'🔍', label:'语义搜索', action:()=>switchView('search'), shortcut:'' },
+  { icon:'📋', label:'日志', action:()=>switchView('logs'), shortcut:'' },
+  { icon:'⟳', label:'刷新所有数据', action:()=>refreshAll(), shortcut:'' },
+  { icon:'🔄', label:'重启 Gateway', action:()=>doAction('restart'), shortcut:'' },
+  { icon:'🩺', label:'运行 Doctor', action:()=>doAction('doctor'), shortcut:'' },
+  { icon:'🔄', label:'重载配置', action:()=>doAction('reload-config'), shortcut:'' },
+  { icon:'◧', label:'切换预览面板', action:()=>togglePreview(), shortcut:'' },
+  { icon:'🔄', label:'同步向量嵌入', action:()=>syncEmbeddings(), shortcut:'' },
+];
+function openCmdPalette() {
+  document.getElementById('cmdOverlay').classList.add('open');
+  document.getElementById('cmdInput').value = '';
+  document.getElementById('cmdInput').focus();
+  renderCmds(commands);
+}
+function closeCmdPalette() { document.getElementById('cmdOverlay').classList.remove('open'); }
+function renderCmds(cmds) {
+  document.getElementById('cmdList').innerHTML = cmds.map((c,i) =>
+    `<div class="cmd-item ${i===0?'active':''}" onclick="execCmd(${commands.indexOf(c)})"><span class="cmd-icon">${c.icon}</span><span class="cmd-label">${c.label}</span>${c.shortcut?`<span class="cmd-shortcut">${c.shortcut}</span>`:''}</div>`
+  ).join('');
+}
+function filterCmds(q) {
+  const filtered = commands.filter(c => c.label.toLowerCase().includes(q.toLowerCase()));
+  renderCmds(filtered);
+}
+function execCmd(i) { commands[i]?.action(); closeCmdPalette(); }
+function handleCmdKey(e) {
+  if (e.key === 'Escape') { closeCmdPalette(); return; }
+  const items = document.querySelectorAll('.cmd-item');
+  const active = document.querySelector('.cmd-item.active');
+  let idx = Array.from(items).indexOf(active);
+  if (e.key === 'ArrowDown') { idx = Math.min(idx+1, items.length-1); }
+  else if (e.key === 'ArrowUp') { idx = Math.max(idx-1, 0); }
+  else if (e.key === 'Enter') { active?.click(); return; }
+  items.forEach(i => i.classList.remove('active'));
+  items[idx]?.classList.add('active');
+  items[idx]?.scrollIntoView({block:'nearest'});
+}
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey||e.metaKey) && e.key === 'k') { e.preventDefault(); openCmdPalette(); }
+});
+
+// ===== Actions =====
+async function doAction(action) {
+  showToast('执行中...');
+  const d = await api('/api/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action}) });
+  showToast(d?.result || '完成');
+}
+
+// ===== Helpers =====
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/\n/g,' ').replace(/\r/g,' '); }
+function memText(md) { if (!md) return '空'; var lines = md.split('\n').filter(function(l){return l.trim().length > 0;}); return lines.length > 1 ? lines[1].trim() : (lines[0]||'空').replace(/^#+\s*/,'').trim(); }
+function catLabel(c) {
+  const m = { workflow:'工作流', memory:'记忆', behavior:'行为', security:'安全', thinking:'思维', architecture:'架构', meta:'元', system:'系统' };
+  return m[c] || c || '其他';
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast show';
+  clearTimeout(t._h); t._h = setTimeout(()=>{ t.className = 'toast'; }, 2000);
+}
+async function refreshAll() {
+  showToast('刷新中...');
+  await Promise.all([loadSessions(), loadModels()]);
+  if (currentView !== 'chat') switchView(currentView);
+  showToast('已刷新');
+}
+
+// ===== Semantic Search =====
+async function doSearch() {
+  const input = document.getElementById('searchInput');
+  const query = input.value.trim();
+  if (!query) return;
+  const el = document.getElementById('searchResults');
+  el.innerHTML = '<div style="padding:12px;color:var(--text-tertiary)"><span class="spinner"></span> 搜索中...</div>';
+  try {
+    const d = await api('/api/search?q=' + encodeURIComponent(query) + '&k=10');
+    if (d.error) {
+      el.innerHTML = `<div class="card" style="color:var(--red)">${esc(d.error)}</div>`;
+      return;
+    }
+    if (!d.results || !d.results.length) {
+      el.innerHTML = '<div class="card" style="color:var(--text-tertiary)">未找到匹配结果。请先点击"同步嵌入"生成向量。</div>';
+      return;
+    }
+    el.innerHTML = d.results.map(r => `
+      <div class="card card-clickable" onclick="openSession('${r.session_id}')" style="margin-bottom:8px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:12px;font-weight:500">${r.session_id}</span>
+          <span style="font-size:11px;color:var(--accent)">${(r.similarity*100).toFixed(1)}% 相似</span>
+        </div>
+        <div style="font-size:11px;color:var(--text-tertiary);margin-bottom:4px">${r.timestamp} · ${r.role}</div>
+        <div style="font-size:13px;line-height:1.5">${esc(r.content)}</div>
+      </div>
+    `).join('');
+  } catch(e) {
+    el.innerHTML = `<div class="card" style="color:var(--red)">搜索失败: ${e.message}</div>`;
+  }
+}
+async function syncEmbeddings() {
+  showToast('同步嵌入中...');
+  try {
+    const d = await api('/api/embed/sync');
+    if (d.error) {
+      showToast('同步失败: ' + d.error);
+    } else {
+      showToast(`已同步 ${d.synced} 条消息`);
+    }
+  } catch(e) {
+    showToast('同步失败: ' + e.message);
+  }
+}
+
+// ===== Init =====
+(async function() {
+  await Promise.all([loadSessions(), loadModels()]);
+  switchView('chat');
+})();
+</script>
+</body>
+</html>
