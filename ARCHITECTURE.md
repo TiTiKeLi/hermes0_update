@@ -72,7 +72,7 @@
 | 模型路由 | ✅ | model-router |
 | 第一性原理 | ✅ | FirstPrinciples |
 | 增强思考 | 外部 skill | EnhancedThinking |
-| 结构化推理管道 | ❌ 缺口 | **需创建: reasoning-pipeline** |
+| 结构化推理管道 | ✅ | reasoning-pipeline** |
 
 ### L4: 记忆层 — 完成度 70%
 
@@ -114,7 +114,7 @@
 | 数据审计 | ✅ | data-security-audit |
 | 网络安全 | ✅ | network-repair.ps1 |
 | Gitleaks 集成 | ✅ | git-version-control |
-| 数据保留策略 | ❌ 缺口 | **需创建: data-retention** |
+| 数据保留策略 | ✅ | data-retention** |
 | 隐私合规 | ❌ 缺口 | **需创建: privacy-policy** |
 
 ### L7: 行为层 — 完成度 60%
@@ -123,7 +123,7 @@
 |------|------|------|
 | 小模型模式 | ✅ | caveman, caveman-compress |
 | 记忆反馈 | ✅ | memory-confirmation-feedback |
-| 用户偏好学习 | ❌ 缺口 | **需创建: preference-learning** |
+| 用户偏好学习 | ✅ | preference-learning** |
 | 跨会话连续性 | ❌ 缺口 | **需创建: session-continuity** |
 
 ### L8: 元层 — 完成度 50%
@@ -182,4 +182,6 @@
 | meta-agent | L7-L8 | 行为/元层完整性 |
 
 每个子 Agent 检查: 当前层是否有未标识的缺口？依赖是否正确？
+
+
 

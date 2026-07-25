@@ -260,3 +260,48 @@
   last_updated: 2026-07-25
   created_by: manual
   description: 系统健康监控 — 组件级健康检查、趋势追踪、自动恢复触发
+
+- name: skill-dev-loop
+  status: active
+  category: workflow
+  related: meta-orchestrator;skill-creation-rules;verification-before-completion;dispatching-parallel-agents;autogpt-self-improve;quality-gates
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: manual
+  description: 技能开发循环 — 缺口识别→子Agent创建→验证→迭代→集成→注册的完整闭环
+
+- name: quality-gates
+  status: active
+  category: workflow
+  related: skill-creation-rules;verification-before-completion;skill-dev-loop
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: manual
+  description: 质量门禁 — G1创建/G2触发/G3依赖/G4安全/G5集成，每道门通不过就返回上一阶段
+
+- name: data-retention
+  status: active
+  category: workflow
+  related: health-monitor;memory-compactor;git-version-control;error-recovery
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: manual
+  description: 数据保留策略 — 日志/会话/缓存的自动清理、保留期限、归档。磁盘 >80% 自动触发。
+
+- name: reasoning-pipeline
+  status: active
+  category: thinking
+  related: deep-need-analysis;model-router;verification-before-completion;meta-orchestrator
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: manual
+  description: 结构化推理管道 — 问题定义→事实收集→假设生成→验证→结论，五阶段闭环
+
+- name: preference-learning
+  status: active
+  category: behavior
+  related: memory-confirmation-feedback;deep-need-analysis;autogpt-self-improve
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: manual
+  description: 用户偏好学习 — 从交互中自动提取偏好/习惯/反模式，动态更新 USER.md
