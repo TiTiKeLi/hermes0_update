@@ -101,3 +101,53 @@ research/heartbeat_last.json
 
 # === 测试文件 ===
 test_embed.py
+# === HTTP 请求转储 ===
+request_dump_*
+incoming/
+
+# === 会话记录 ===
+session_*.json
+sessions/*.json
+sessions/
+
+# === JSONL 数据 ===
+*.jsonl
+
+# === 音频文件 ===
+*.mp3
+*.wav
+audio_cache/
+
+# === 二进制文件 ===
+tirith
+*.exe
+*.dll
+
+# === 大型压缩包 ===
+crewAI.zip
+*.zip
+
+# === 配置备份 ===
+config.yaml.bak
+docker-compose.yml.bak
+
+# === Python 编译缓存（递归）===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# === 运行时/缓存JSON ===
+registry.json
+trusted.json
+openrouter_model_metadata.json
+model_catalog.json
+
+# === 运行时状态 ===
+state.yaml
+state.json
+
+# === 启动脚本（它们只是快捷方式）===
+start-dashboard.bat
+start-daemon.vbs
+start-proxy.vbs
