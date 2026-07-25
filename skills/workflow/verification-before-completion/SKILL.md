@@ -65,7 +65,7 @@ triggers:
 
 | 场景 | 行动 | 工具链 | 产出 |
 |------|------|--------|------|
-| 技能创建/修改 | `skill_view` 加载确认 → 用 `delegate_task` 分派独立子智能体验证每个更新 | `skill_view`, `delegate_task` | 技能可加载确认 + 子智能体独立验证结果 |
+| 技能创建/修改 | `skill_view` 加载确认 → 用 `delegate_task` 分派**对抗性角色**的子智能体验证每个更新 | `skill_view`, `delegate_task` | 技能可加载确认 + 子智能体独立验证结果（含发现的问题） |
 | 测试通过/失败 | 运行完整测试命令→读输出→统计失败数 | `terminal` | 测试结果+失败列表 |
 | Bug 修复 | 重新运行触发 Bug 的原始命令/测试→确认通过 | `terminal` | 修复验证输出 |
 | 构建/编译 | 重新运行完整构建命令→确认 exit 0 | `terminal` | 构建日志 |
@@ -86,8 +86,18 @@ triggers:
    - Bug 已修 → 重新运行原始失败场景
    - 文件已写 → `read_file` 回读
    - 网络请求完成 → curl 带实际输出
-   - 技能创建/修改 → `skill_view` 加载 + `delegate_task` 分派独立子智能体验证（见 `references/skill-creation-verification-template.md`）
-2. 选择最直接的验证方式（不是最快，是**最可靠**）
+   - 技能创建/修改 → `skill_view` 加载 + `delegate_task` 分派独立子智能体验证（见 `references/skill-creation-verification-template.md`，以及 `references/oppositional-verification-lesson.md` 的对抗性角色设计原则）
+3. **子智能体验证任务的 goal 设计（关键）**：
+   - ❌ **禁止**：goal 预设结论（如 `验证xxx已正确集成` → 子Agent 只能盖章，不会找问题）
+   - ✅ **必须**：goal 要开放结果 + 赋予对抗性角色（如 `审计xxx的集成质量——专门找问题、找断裂、找矛盾`）
+   - 给角色的三类选择：
+     | 角色 | Goal 示例 | 适合场景 |
+     |------|-----------|---------|
+     | **审计员** | 审计 X 的结构完整性和逻辑一致性 | 通用验证 |
+     | **结构分析师** | 检查 X 的编号、过渡、引用是否连贯 | 文档结构验证 |
+     | **反对派** | 以挑剔眼光找 X 的问题，找不合理处 | 高风险变更 |
+   - context 里**不要**给预期内容或行号（否则变成字符串查找而非真正验证）
+   - 必须定义失败标准：什么算问题、什么算通过
 
 ### Step 2: 执行完整命令（重新运行，不要用缓存）
 
@@ -152,6 +162,7 @@ assert "exit" in conclusion or "输出" in conclusion or "测试" in conclusion
 - 验证前就表达满意（"太好了！"、"完美！"、"搞定！"）
 - 用之前的运行结果代替重新验证
 - 只读了输出开头几行就下结论
+- 给子智能体的 goal 预设了结论（"验证xxx已正确集成"而非"审计xxx是否完整"）
 
 ### 迭代上下文
 
