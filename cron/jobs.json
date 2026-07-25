@@ -1,0 +1,360 @@
+{
+  "jobs": [
+    {
+      "id": "a0938e751585",
+      "name": "\u6bcf\u5929\u65e9\u4e0a9\u70b9\u95ee\u65e9\u5b89",
+      "prompt": "\u6bcf\u5929\u65e9\u4e0a9\u70b9\u95ee\u65e9\u5b89",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 9 * * *",
+        "display": "0 9 * * *"
+      },
+      "schedule_display": "0 9 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 9
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-06-18T19:38:11.372668+08:00",
+      "next_run_at": "2026-07-26T09:00:00+08:00",
+      "last_run_at": "2026-07-25T09:11:56.893980+08:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": "live adapter send failed: iLink sendmessage rate limited; cooldown active for 30.0s; live adapter delivery to weixin:o9cq802TxGc41l3NREgwTwhicoAk@im.wechat failed: iLink sendmessage rate limited; cooldown active for 30.0s; delivery error: Weixin send failed: iLink sendmessage rate limited; cooldown active for 30.0s",
+      "deliver": "origin",
+      "origin": null,
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "a351c7f9e890",
+      "name": "hierarchical-memory-sync",
+      "prompt": "\u8fd0\u884c\u8bb0\u5fc6\u5206\u5c42\u540c\u6b65\u811a\u672c v3\u3002\u5c06 fact_store \u4e2d\u7684\u9ad8\u4fe1\u4efb\u5ea6\u4e8b\u5b9e\u540c\u6b65\u5230 memories/MEMORY.md\uff0c\u6761\u4ef6\u6027\u540c\u6b65\u5230\u6839 MEMORY.md\uff08mtime \u5b88\u536b + id \u53bb\u91cd + \u5bb9\u91cf\u5b88\u536b\uff09\u3002\u811a\u672c\u8def\u5f84: /opt/data/scripts/memory-sync.py",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "memory-sync.py",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 * * * *",
+        "display": "0 * * * *"
+      },
+      "schedule_display": "0 * * * *",
+      "repeat": {
+        "times": null,
+        "completed": 73
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-21T16:59:03.225695+08:00",
+      "next_run_at": "2026-07-26T00:00:00+08:00",
+      "last_run_at": "2026-07-25T23:01:15.568677+08:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "weixin",
+        "chat_id": "o9cq802TxGc41l3NREgwTwhicoAk@im.wechat",
+        "chat_name": null,
+        "thread_id": null
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "86843bcf97fc",
+      "name": "tool-registry-heartbeat",
+      "prompt": "\u8fd0\u884c\u5de5\u5177\u72b6\u6001\u63a2\u6d4b\u5e76\u62a5\u544a\u4e0d\u5065\u5eb7\u7684\u5de5\u5177\u3002\n\n1. \u8fd0\u884c python3 /opt/data/state_registry.py probe\n2. \u8fd0\u884c python3 /opt/data/state_registry.py unhealthy\n3. \u5982\u679c\u6709\u4e0d\u5065\u5eb7\u7684\u5de5\u5177\uff0c\u5217\u51fa\u8be6\u7ec6\u4fe1\u606f\u5e76\u5c1d\u8bd5\u81ea\u52a8\u6062\u590d\uff08\u901a\u8fc7\u91cd\u65b0\u6ce8\u518c\uff09",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 30,
+        "display": "every 30m"
+      },
+      "schedule_display": "every 30m",
+      "repeat": {
+        "times": null,
+        "completed": 123
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-21T21:24:30.650239+08:00",
+      "next_run_at": "2026-07-25T23:16:48.726999+08:00",
+      "last_run_at": "2026-07-25T22:46:48.726999+08:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "weixin",
+        "chat_id": "o9cq802TxGc41l3NREgwTwhicoAk@im.wechat",
+        "chat_name": null,
+        "thread_id": null
+      },
+      "enabled_toolsets": [
+        "terminal"
+      ],
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "84030ebfc20b",
+      "name": "memory-compactor-v2",
+      "prompt": "\u8fd0\u884c\u8bb0\u5fc6\u538b\u7f29 v6\uff1a\u524d\u54e8\u5b89\u5168\u68c0\u67e5\uff08>10KB\u4e2d\u6b62\uff09+ \u53bb\u91cd\u5408\u5e76 + \u6761\u4ef6\u5f52\u6863\u3002\u8bfb /opt/data/MEMORY.md \u548c /opt/data/USER.md\uff0c\u68c0\u67e5\u5bb9\u91cf\u9608\u503c\uff08MEMORY: 85%/2000, USER: 75%/1375\uff09\u3002\u524d\u54e8\u5b89\u5168\u95e8\u5728 >10KB \u65f6\u76f4\u63a5\u4e2d\u6b62\u3002\u811a\u672c\u8def\u5f84: /opt/data/scripts/memory_compactor_v2.py",
+      "skills": [
+        "memory-compactor"
+      ],
+      "skill": "memory-compactor",
+      "model": null,
+      "provider": null,
+      "base_url": null,
+      "script": "memory_compactor_v2.py",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 5,
+        "display": "every 5m"
+      },
+      "schedule_display": "every 5m",
+      "repeat": {
+        "times": null,
+        "completed": 354
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-22T22:20:41.960949+08:00",
+      "next_run_at": "2026-07-25T23:10:44.674255+08:00",
+      "last_run_at": "2026-07-25T23:05:44.674255+08:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": null,
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null,
+      "provider_snapshot": null,
+      "model_snapshot": null
+    },
+    {
+      "id": "62f25284c850",
+      "name": "heartbeat-vibe",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "heartbeat_vibe.py",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 30,
+        "display": "every 30m"
+      },
+      "schedule_display": "every 30m",
+      "repeat": {
+        "times": null,
+        "completed": 60
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-24T09:49:44.354136+08:00",
+      "next_run_at": "2026-07-25T23:10:47.912674+08:00",
+      "last_run_at": "2026-07-25T22:40:47.912674+08:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "weixin",
+        "chat_id": "o9cq802TxGc41l3NREgwTwhicoAk@im.wechat",
+        "chat_name": null,
+        "thread_id": null,
+        "user_id": "o9cq802TxGc41l3NREgwTwhicoAk@im.wechat"
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    },
+    {
+      "id": "feaaf81c24b3",
+      "name": "download-gate-scanner",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "download_gate.py scan-new",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 2880,
+        "display": "every 2880m"
+      },
+      "schedule_display": "every 2880m",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-24T21:35:13.856025+08:00",
+      "next_run_at": "2026-07-26T21:35:13.858161+08:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "weixin",
+        "chat_id": "o9cq802TxGc41l3NREgwTwhicoAk@im.wechat",
+        "chat_name": null,
+        "thread_id": null,
+        "user_id": "o9cq802TxGc41l3NREgwTwhicoAk@im.wechat"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "f40dbe4b7be0",
+      "name": "autogpt-self-iterate",
+      "prompt": "\u8fd0\u884c autogpt-self-improve \u6280\u80fd\u7684\u81ea\u8fed\u4ee3\u95ed\u73af\u3002\u5206\u6790\u6240\u6709\u6280\u80fd\uff0c\u8bc4\u4f30\u8d28\u91cf\uff0c\u751f\u6210\u6539\u8fdb\u65b9\u6848\u3002\n\n\u64cd\u4f5c\u6d41\u7a0b\uff1a\n1. \u52a0\u8f7d autogpt-self-improve skill \u7684 Step 1-5\n2. \u5148 skills_list() \u76d8\u70b9\u5f53\u524d\u6240\u6709\u6280\u80fd\n3. \u5bf9\u6bcf\u4e2a\u6280\u80fd skill_view() \u83b7\u53d6\u5185\u5bb9\n4. cronjob(action='list') \u770b\u54ea\u4e9b\u6709\u6267\u884c\u8bb0\u5f55\n5. \u5bf9\u6267\u884c\u6709\u9519\u8bef\u6216\u8d28\u91cf\u4f4e\u7684\u6280\u80fd\u5199\u6539\u8fdb\u65b9\u6848\n6. \u5c06\u8bc4\u4f30\u62a5\u544a\u5199\u5165 /opt/data/research/self_improve/latest_eval.md\n\n\u7528\u4e2d\u6587\u8f93\u51fa\u7ed3\u679c\u62a5\u544a\u3002\u5982\u679c\u8fde\u7eed 24h \u5185\u5df2\u7ecf\u8dd1\u8fc7\uff0c\u62a5\u544a\u8bf4\"24h \u7a97\u53e3\u5185\uff0c\u8df3\u8fc7\"\u5e76\u9000\u51fa\u3002",
+      "skills": [
+        "autogpt-self-improve",
+        "functional-decomp",
+        "interface-decomp",
+        "download-gate"
+      ],
+      "skill": "autogpt-self-improve",
+      "model": null,
+      "provider": null,
+      "provider_snapshot": "deepseek",
+      "model_snapshot": "deepseek-v4-flash",
+      "base_url": null,
+      "script": null,
+      "no_agent": false,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 1440,
+        "display": "every 1440m"
+      },
+      "schedule_display": "every 1440m",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-25T09:51:54.839666+08:00",
+      "next_run_at": "2026-07-26T09:51:54.955010+08:00",
+      "last_run_at": null,
+      "last_status": null,
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "origin",
+      "origin": {
+        "platform": "weixin",
+        "chat_id": "o9cq802TxGc41l3NREgwTwhicoAk@im.wechat",
+        "chat_name": null,
+        "thread_id": null,
+        "user_id": "o9cq802TxGc41l3NREgwTwhicoAk@im.wechat"
+      },
+      "enabled_toolsets": null,
+      "workdir": null
+    },
+    {
+      "id": "da53157d9535",
+      "name": "hooks-engine-watchdog",
+      "prompt": "",
+      "skills": [],
+      "skill": null,
+      "model": null,
+      "provider": null,
+      "provider_snapshot": null,
+      "model_snapshot": null,
+      "base_url": null,
+      "script": "hooks_watchdog.sh",
+      "no_agent": true,
+      "context_from": null,
+      "schedule": {
+        "kind": "interval",
+        "minutes": 5,
+        "display": "every 5m"
+      },
+      "schedule_display": "every 5m",
+      "repeat": {
+        "times": null,
+        "completed": 98
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "paused_at": null,
+      "paused_reason": null,
+      "created_at": "2026-07-25T14:26:47.177683+08:00",
+      "next_run_at": "2026-07-25T23:10:45.107418+08:00",
+      "last_run_at": "2026-07-25T23:05:45.107418+08:00",
+      "last_status": "ok",
+      "last_error": null,
+      "last_delivery_error": null,
+      "deliver": "local",
+      "origin": {
+        "platform": "weixin",
+        "chat_id": "o9cq802TxGc41l3NREgwTwhicoAk@im.wechat",
+        "chat_name": null,
+        "thread_id": null,
+        "user_id": "o9cq802TxGc41l3NREgwTwhicoAk@im.wechat"
+      },
+      "enabled_toolsets": null,
+      "workdir": null,
+      "fire_claim": null
+    }
+  ],
+  "updated_at": "2026-07-25T23:05:45.111508+08:00"
+}

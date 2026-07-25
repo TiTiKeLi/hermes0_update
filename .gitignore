@@ -1,0 +1,95 @@
+# === 数据库 ===
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# === 缓存 ===
+__pycache__/
+*.pyc
+cache/
+audio_cache/
+image_cache/
+context_length_cache.yaml
+models_dev_cache.json
+.skills_prompt_snapshot.json
+
+# === 日志 ===
+*.log
+logs/
+healthcheck.log
+
+# === 数据目录 ===
+sessions/
+memories/
+incoming/
+weixin/
+.synced_fact_ids.txt
+.update_check
+
+# === 备份 ===
+backups/
+*.bak
+
+# === 密钥 ===
+.env
+auth.json
+auth.lock
+wechat_qr.json
+wechat_qr.png
+
+# === 系统状态 ===
+.connection_state
+gateway_state.json
+gateway.lock
+gateway.pid
+processes.json
+channel_directory.json
+
+# === 临时文件 ===
+*.lock
+*.pid
+_prompt.txt
+_test_ds.py
+
+# === 大型文件 ===
+*.zip
+*.tar.gz
+superpowers-zh.zip
+
+# === OS 文件 ===
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# === Hermes 内部 ===
+kanban/
+kanban.db*
+versions/
+claude-obsidian/
+.agents/
+agents/
+pairing/
+sandboxes/
+tasks/
+toolbox/
+projects/
+reports/
+platforms/
+weixin/
+download_gate/
+research_knowledge/
+
+# === 技能缓存 ===
+skills/.curator_backups/
+skills/.hub/
+skills/.curator_state
+skills/.usage.json
+skills/.usage.json.lock
+
+# === 损坏备份 ===
+config.yaml.corrupt*
+
+# === 空目录 ===
+bin/

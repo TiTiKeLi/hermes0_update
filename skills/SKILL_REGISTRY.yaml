@@ -1,0 +1,226 @@
+# Skill Registry — 所有 skill 的创建记录
+# 格式说明：
+#   name:          技能名（唯一，小写中划线）
+#   status:        active | deprecated | merged:<target>
+#   category:      workflow | memory | behavior | security | thinking | architecture
+#   related:       关联skill，多个用 ; 分隔
+#   created:       创建日期 YYYY-MM-DD
+#   last_updated:  最后修改日期
+#   created_by:    auto | user
+#   description:   一句话描述
+
+- name: secure-download
+  status: active
+  category: security
+  related: ""
+  created: 2025-01-01
+  last_updated: 2025-01-01
+  created_by: auto
+  description: 安全下载技能
+
+- name: deep-need-analysis
+  status: active
+  category: thinking
+  related: verification-before-completion
+  created: 2025-01-01
+  last_updated: 2025-01-01
+  created_by: auto
+  description: 深度需求分析思维框架
+
+- name: github-discover
+  status: active
+  category: workflow
+  related: hermes-optimization;memory-compactor;skill-creation-rules
+  created: 2025-01-01
+  last_updated: 2026-07-24
+  created_by: auto
+  description: 需求驱动研究管道，V3可执行协议
+
+- name: hermes-optimization
+  status: active
+  category: architecture
+  related: ""
+  created: 2025-01-01
+  last_updated: 2025-01-01
+  created_by: auto
+  description: Hermes Docker全量优化
+
+- name: tool-governance
+  status: active
+  category: architecture
+  related: ""
+  created: 2025-01-01
+  last_updated: 2025-01-01
+  created_by: auto
+  description: 工具治理架构v1
+
+- name: tool-governance-v2
+  status: active
+  category: architecture
+  related: tool-governance
+  created: 2025-01-01
+  last_updated: 2025-01-01
+  created_by: auto
+  description: 工具治理架构v2
+
+- name: caveman-reply
+  status: active
+  category: behavior
+  related: ""
+  created: 2025-01-01
+  last_updated: 2025-01-01
+  created_by: auto
+  description: caveman reply mode
+
+- name: memory-confirmation-feedback
+  status: active
+  category: behavior
+  related: ""
+  created: 2025-01-01
+  last_updated: 2025-01-01
+  created_by: auto
+  description: 记忆写入反馈
+
+- name: hierarchical-memory-sync
+  status: active
+  category: memory
+  related: memory-compactor;verification-before-completion
+  created: 2025-01-01
+  last_updated: 2025-01-01
+  created_by: auto
+  description: Hermes自动记忆分层同步
+
+- name: memory-compactor
+  status: active
+  category: memory
+  related: hierarchical-memory-sync
+  created: 2025-01-01
+  last_updated: 2026-07-24
+  created_by: auto
+  description: 记忆压缩监视器
+
+- name: model-router
+  status: active
+  category: thinking
+  related: ""
+  created: 2025-01-01
+  last_updated: 2025-01-01
+  created_by: auto
+  description: 复杂任务DeepSeek路由
+
+- name: skill-creation-rules
+  status: active
+  category: meta
+  related: memory-compactor;github-discover
+  created: 2026-07-24
+  last_updated: 2026-07-24
+  created_by: auto
+  description: Skill创建强制规则 + 注册器
+
+- name: external-adaptor
+  status: active
+  category: workflow
+  related: secure-download;github-discover;skill-creation-rules;caveman-compress;memory-compactor;functional-decomp;arch-decomp;interface-decomp;dataflow-decomp
+  created: 2026-07-24
+  last_updated: 2026-07-24
+  created_by: auto
+  description: 外部项目/Skill 下载→拆解→架构映射→重组→集成→测试管道
+
+- name: functional-decomp
+  status: active
+  category: workflow
+  related: secure-download;memory-compactor
+  created: 2026-07-24
+  last_updated: 2026-07-24
+  created_by: auto
+  description: 功能拆解规则 — 从外部项目提取功能清单，识别功能边界、模块职责、核心流程
+
+- name: arch-decomp
+  status: active
+  category: workflow
+  related: functional-decomp;skill-creation-rules;memory-compactor
+  created: 2026-07-24
+  last_updated: 2026-07-24
+  created_by: auto
+  description: 架构拆解规则 — 识别外部项目的架构模式、模块关系、控制流，映射到 Hermes 架构
+
+- name: interface-decomp
+  status: active
+  category: workflow
+  related: functional-decomp;tool-governance-v2;memory-compactor
+  created: 2026-07-24
+  last_updated: 2026-07-24
+  created_by: auto
+  description: 接口拆解规则 — 提取外部项目的核心类/函数签名、参数、返回值，适配为 Hermes tool/skill
+
+- name: dataflow-decomp
+  status: active
+  category: workflow
+  related: functional-decomp;interface-decomp;memory-compactor
+  created: 2026-07-24
+  last_updated: 2026-07-24
+  created_by: auto
+  description: 数据流拆解规则 — 追踪外部项目的输入→处理→输出路径，识别状态管理、存储策略
+
+- name: caveman-compress
+  status: active
+  category: behavior
+  related: caveman-reply;memory-compactor
+  created: 2026-07-24
+  last_updated: 2026-07-24
+  created_by: auto
+  description: 小模型 caveman 指令模式——极度受限格式让 3B 模型做对结构化任务
+
+- name: download-gate
+  status: active
+  category: security
+  related: secure-download;external-adaptor
+  created: 2026-07-24
+  last_updated: 2026-07-24
+  created_by: auto
+  description: 下载门卫 ‑ 每次下载前强制校验 checklist，不满足即中止
+
+- name: autogpt-self-improve
+  status: active
+  category: workflow
+  related: functional-decomp;interface-decomp;arch-decomp;dataflow-decomp;download-gate;tool-governance-v2
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: auto
+  description: AutoGPT Forge 架构提炼的自迭代代理 — 分析自身技能、评估效果、生成改进方案
+
+- name: meta-orchestrator
+  status: active
+  category: workflow
+  related: autogpt-self-improve;functional-decomp;interface-decomp;external-adaptor;tool-governance-v2
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: auto
+  description: 元编排系统 — 需求→规划框架→拆分子任务→分发Ollama智能体→评分→汇总，全程生命周期管理
+
+- name: config-unification
+  status: active
+  category: architecture
+  related: hermes-optimization;skill-creation-rules
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: manual
+  description: 配置统筹方法论 — 追踪变量来源、文档化覆盖链、防止跨文件冲突
+
+- name: verification-before-completion
+  status: active
+  category: workflow
+  related: deep-need-analysis
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: auto
+  description: 完成前验证 — 必须运行验证命令并确认输出后才能声称成功；始终用证据支撑断言
+
+- name: dispatching-parallel-agents
+  status: active
+  category: workflow
+  related: meta-orchestrator
+  created: 2026-07-25
+  last_updated: 2026-07-25
+  created_by: auto
+  description: 并行分派智能体 — 每个独立问题域分派一个子智能体，并发工作，不共享状态

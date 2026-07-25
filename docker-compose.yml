@@ -1,0 +1,34 @@
+services:
+  hermes:
+    image: hermes-agent:with-deps
+    container_name: hermes
+    restart: unless-stopped
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        unset HTTP_PROXY HTTPS_PROXY http_proxy https_proxy NO_PROXY no_proxy
+        python3 /opt/data/gui.py &
+        exec hermes gateway run
+    ports:
+      - "8642:8642"
+      - "8644:8644"
+    volumes:
+      - C:\Users\Lsc\.hermes:/opt/data
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Shanghai
+    dns:
+      - 8.8.8.8
+      - 223.5.5.5
+    dns_opt:
+      - attempts:3
+      - timeout:2
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "bash", "/opt/data/healthcheck.sh"]
+      interval: 60s
+      timeout: 10s
+      start_period: 30s
+      retries: 3

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hermes Dashboard</title>
+<style>
+  :root {
+    --bg: #f5f5f5; --card: #fff; --border: #e5e5e5;
+    --text: #1a1a1a; --dim: #8c8c8c; --accent: #4f6ef7;
+    --accent-bg: #f0f2ff; --hover: #f0f0f0; --active: #e8e8e8;
+    --radius: 8px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --card: #252525; --border: #333;
+      --text: #e0e0e0; --dim: #888; --accent: #6b8aff;
+      --accent-bg: #1e2235; --hover: #2a2a2a; --active: #303030;
+    }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg); color: var(--text); padding: 20px; line-height: 1.5; }
+  .container { max-width: 960px; margin: 0 auto; }
+
+  /* Header */
+  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+  .header h1 { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .status-badge { font-size: 11px; padding: 2px 10px; border-radius: 10px; background: var(--accent-bg); color: var(--accent); font-weight: 500; }
+  .header-actions { display: flex; gap: 6px; align-items: center; }
+  .header-actions .ts { font-size: 12px; color: var(--dim); }
+
+  /* Buttons - unified DeepSeek style */
+  .btn {
+    padding: 6px 14px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--card); color: var(--text); cursor: pointer;
+    font-size: 13px; display: inline-flex; align-items: center; gap: 5px;
+    transition: all .12s;
+  }
+  .btn:hover { background: var(--hover); border-color: var(--accent); }
+  .btn:active { background: var(--active); transform: scale(.97); }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .btn.primary:hover { opacity: .9; }
+  .btn-sm { padding: 4px 10px; font-size: 12px; }
+  .nav-btn { border: none; background: transparent; color: var(--dim); cursor: pointer; font-size: 12px; padding: 6px 10px; border-radius: 6px; transition: all .12s; }
+  .nav-btn:hover { background: var(--hover); color: var(--text); }
+  .nav-btn:active { background: var(--active); }
+  .nav-btn.active { color: var(--accent); background: var(--accent-bg); }
+
+  /* Status grid */
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+  @media (max-width: 640px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+  .stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; }
+  .stat-label { font-size: 11px; color: var(--dim); margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+  .stat-value { font-size: 16px; font-weight: 600; }
+  .stat-sub { font-size: 11px; color: var(--dim); margin-top: 2px; }
+
+  /* Navigation tabs */
+  .tabs { display: flex; gap: 2px; margin-bottom: 12px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 3px; }
+  .tabs .tab { flex: 1; text-align: center; padding: 7px 0; border-radius: 5px; cursor: pointer; font-size: 12px; color: var(--dim); transition: all .12s; border: none; background: transparent; }
+  .tabs .tab:hover { color: var(--text); background: var(--hover); }
+  .tabs .tab.active { color: var(--accent); background: var(--accent-bg); font-weight: 500; }
+
+  /* Card */
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
+  .card-title { font-size: 12px; color: var(--dim); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+
+  /* History list */
+  .hist-item { padding: 8px 10px; border-radius: 6px; cursor: pointer; margin-bottom: 2px; transition: background .12s; font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
+  .hist-item:hover { background: var(--hover); }
+  .hist-item .icon { flex-shrink: 0; width: 20px; text-align: center; color: var(--dim); }
+  .hist-item .time { flex-shrink: 0; font-size: 11px; color: var(--dim); min-width: 48px; }
+  .hist-item .preview { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hist-item .arrow { flex-shrink: 0; color: var(--dim); font-size: 11px; transition: transform .15s; }
+  .hist-item.open .arrow { transform: rotate(90deg); }
+  .hist-detail { display: none; padding: 10px 12px; margin: 0 0 4px 28px; background: var(--bg); border-radius: 6px; font-size: 13px; line-height: 1.6; border-left: 2px solid var(--accent); }
+  .hist-detail.open { display: block; }
+
+  /* Memory cards (three items) */
+  .mem-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+  @media (max-width: 640px) { .mem-3 { grid-template-columns: 1fr; } }
+  .mem-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; cursor: pointer; transition: all .12s; }
+  .mem-card:hover { border-color: var(--accent); }
+  .mem-card:active { transform: scale(.98); }
+  .mem-card .mem-icon { font-size: 18px; margin-bottom: 6px; }
+  .mem-card .mem-title { font-size: 12px; color: var(--dim); margin-bottom: 3px; }
+  .mem-card .mem-preview { font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* Modal */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--card); border: 1px solid var(--border); border-radius: 10px; max-width: 600px; width: 100%; max-height: 80vh; display: flex; flex-direction: column; box-shadow: 0 8px 30px rgba(0,0,0,.15); }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+  .modal-header h3 { font-size: 15px; font-weight: 600; }
+  .modal-close { border: none; background: transparent; color: var(--dim); cursor: pointer; font-size: 18px; padding: 0 4px; }
+  .modal-close:hover { color: var(--text); }
+  .modal-body { padding: 14px 16px; overflow-y: auto; flex: 1; font-size: 13px; }
+  .modal-body table { width: 100%; border-collapse: collapse; }
+  .modal-body td { padding: 6px 4px; border-bottom: 1px solid var(--border); }
+  .modal-body td:first-child { color: var(--dim); width: 100px; }
+  .modal-body .log-line { font-family: monospace; font-size: 12px; padding: 3px 0; border-bottom: 1px solid var(--border); display: flex; gap: 8px; }
+  .modal-body .log-line .lt { color: var(--dim); flex-shrink: 0; }
+
+  /* Query box */
+  .query-row { display: flex; gap: 6px; }
+  .query-row input { flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 13px; outline: none; }
+  .query-row input:focus { border-color: var(--accent); }
+  .chat-box { border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); min-height: 80px; max-height: 200px; overflow-y: auto; padding: 10px; margin-bottom: 6px; font-size: 13px; }
+  .chat-box .msg { margin-bottom: 6px; display: flex; gap: 6px; }
+  .chat-box .msg .avatar { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; background: var(--accent-bg); color: var(--accent); }
+  .chat-box .msg.bot .avatar { background: var(--bg); color: var(--text); }
+  .chat-box .msg .bubble { background: var(--card); padding: 6px 10px; border-radius: 6px; max-width: 85%; border: 1px solid var(--border); line-height: 1.5; }
+  .chat-box .msg.bot .bubble { }
+  .chat-box .msg .bubble .meta { font-size: 10px; color: var(--dim); margin-top: 3px; }
+
+  /* Controls */
+  .controls { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* Loading */
+  .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .5s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .scroll::-webkit-scrollbar { width: 5px; }
+  .scroll::-webkit-scrollbar-track { background: transparent; }
+  .scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); padding: 8px 16px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); font-size: 13px; display: none; z-index: 999; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,.1); }
+  .empty-state { color: var(--dim); font-size: 12px; padding: 16px 0; text-align: center; }
+</style>
+</head>
+<body>
+<div class="container" id="app">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Hermes Dashboard <span class="status-badge" id="globalStatus">● OK</span></h1>
+    <div class="header-actions">
+      <span class="ts" id="lastUpdate">—</span>
+      <button class="btn btn-sm" onclick="refreshAll()">⟳ 刷新</button>
+    </div>
+  </div>
+
+  <!-- Status row -->
+  <div class="grid-4" id="statusCards">
+    <div class="stat"><div class="stat-label">● 容器</div><div class="stat-value" id="containerStatus">—</div><div class="stat-sub" id="containerUptime"></div></div>
+    <div class="stat"><div class="stat-label">● Ollama</div><div class="stat-value" id="ollamaStatus">—</div><div class="stat-sub" id="ollamaModel"></div></div>
+    <div class="stat"><div class="stat-label">● 微信</div><div class="stat-value" id="wechatStatus">—</div><div class="stat-sub" id="wechatAccount"></div></div>
+    <div class="stat"><div class="stat-label">● 记忆</div><div class="stat-value" id="memoryCount">—</div><div class="stat-sub" id="memoryDetail"></div></div>
+  </div>
+
+  <!-- Nav buttons -->
+  <div class="tabs" id="navTabs">
+    <button class="tab" onclick="openModal('env')">环境信息</button>
+    <button class="tab" onclick="openModal('sessions')">最近对话</button>
+    <button class="tab" onclick="openModal('logs')">实时日志</button>
+    <button class="tab" onclick="openModal('capabilities')">⚡ 能力</button>
+    <button class="tab" onclick="openModal('cron')">⏰ 定时</button>
+    <button class="tab" onclick="openModal('models')">🖥 模型</button>
+  </div>
+
+  <!-- Three Memories -->
+  <div class="mem-3" id="memoryCards">
+    <div class="mem-card" onclick="openModal('memory1')"><div class="mem-icon">🧠</div><div class="mem-title">系统记忆</div><div class="mem-preview" id="memPreview1">加载中...</div></div>
+    <div class="mem-card" onclick="openModal('memory2')"><div class="mem-icon">💬</div><div class="mem-title">对话记忆</div><div class="mem-preview" id="memPreview2">加载中...</div></div>
+    <div class="mem-card" onclick="openModal('memory3')"><div class="mem-icon">⚙</div><div class="mem-title">环境记忆</div><div class="mem-preview" id="memPreview3">加载中...</div></div>
+  </div>
+
+  <!-- SKILL & MCP buttons -->
+  <div style="display:flex;gap:6px;margin-bottom:10px">
+    <button class="btn btn-sm" onclick="openModal('skills')" style="flex:1;justify-content:center">🧩 SKILL <span style="color:var(--dim);font-size:11px" id="skillCount">0</span></button>
+    <button class="btn btn-sm" onclick="openModal('mcp')" style="flex:1;justify-content:center">🔌 MCP <span style="color:var(--dim);font-size:11px" id="mcpCount">0</span></button>
+  </div>
+
+  <!-- History (clickable user messages) -->
+  <div class="card">
+    <div class="card-title">📜 历史消息 <span style="color:var(--dim);font-weight:400">| 点击用户消息查看回复</span></div>
+    <div id="historyList">
+      <div class="empty-state">加载中...</div>
+    </div>
+  </div>
+
+  <!-- Quick Query -->
+  <div class="card">
+    <div class="card-title">✏ Quick Query</div>
+    <div class="chat-box scroll" id="chatBox">
+      <div class="msg bot"><div class="avatar">H</div><div class="bubble">Hermes Agent 已就绪，Ollama + 微信已连接。</div></div>
+    </div>
+    <div class="query-row">
+      <input type="text" id="chatInput" placeholder="输入消息..." onkeydown="if(event.key==='Enter') sendQuery()">
+      <button class="btn btn-sm primary" onclick="sendQuery()">发送</button>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="card">
+    <div class="card-title">🎛 控制</div>
+    <div class="controls">
+      <button class="btn btn-sm" onclick="action('restart')">重启 Gateway</button>
+      <button class="btn btn-sm" onclick="action('restart-container')">重启容器</button>
+      <button class="btn btn-sm" onclick="action('doctor')">Hermes Doctor</button>
+      <details style="font-size:12px;color:var(--dim);cursor:pointer"><summary style="padding:4px 0">📄 config.yaml</summary><pre style="font-size:11px;margin-top:6px;overflow-x:auto" id="configYaml">加载中...</pre></details>
+    </div>
+  </div>
+
+  <!-- Dashboard Chat -->
+  <div class="card">
+    <div class="card-title">🛠 仪表盘控制 <span style="color:var(--dim);font-weight:400">| 自然语言指令修改仪表盘</span></div>
+    <div class="chat-box scroll" id="dashChatBox" style="min-height:60px;max-height:120px">
+      <div class="msg bot"><div class="avatar">D</div><div class="bubble">仪表盘助手就绪，输入指令修改仪表盘。</div></div>
+    </div>
+    <div class="query-row">
+      <input type="text" id="dashChatInput" placeholder="例如: 添加GPU温度监控卡片..." onkeydown="if(event.key==='Enter') sendDashChat()">
+      <button class="btn btn-sm primary" onclick="sendDashChat()">执行</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header"><h3 id="modalTitle">—</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+      <div class="modal-body scroll" id="modalBody"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ====== Data ======
+let allHistory = [];
+let envData = {};
+let sessionData = [];
+let logData = [];
+
+// ====== Refresh ======
+async function refreshAll() {
+  document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+  await Promise.all([loadStatus(), loadHistory(), loadMemory(), loadConfig(), loadSkills(), loadMcp()]);
+}
+
+// ====== Status ======
+async function loadStatus() {
+  try {
+    const d = await (await fetch('/api/status')).json();
+    setStatus('containerStatus', d.container, d.uptime && 'up ' + d.uptime);
+    setStatus('ollamaStatus', d.ollama, d.ollamaModel);
+    setStatus('wechatStatus', d.wechat, d.wechatAccount);
+    document.getElementById('memoryCount').textContent = d.memory ?? '—';
+    document.getElementById('memoryDetail').textContent = d.memoryDetail || '';
+
+    const allOk = [d.container, d.ollama, d.wechat].every(s => s === 'running' || s === 'reachable' || s === 'connected');
+    const badge = document.getElementById('globalStatus');
+    badge.textContent = allOk ? '● OK' : '● WARN';
+    badge.style.color = allOk ? 'var(--accent)' : '#e8a317';
+    envData = d.env || {};
+  } catch { }
+}
+
+function setStatus(el, val, sub) {
+  const e = document.getElementById(el);
+  if (!e) return;
+  const colors = { running:'var(--accent)', reachable:'var(--accent)', connected:'var(--accent)', stopped:'#e74c3c', unreachable:'#e74c3c', disconnected:'#e74c3c' };
+  e.innerHTML = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${colors[val]||'var(--dim)'};margin-right:4px"></span>${val||'—'}`;
+  if (sub) {
+    const next = e.parentElement.nextElementSibling;
+    if (next) next.textContent = sub;
+  }
+}
+
+// ====== History ======
+async function loadHistory() {
+  try {
+    const msgs = await (await fetch('/api/history')).json();
+    allHistory = msgs;
+    const list = document.getElementById('historyList');
+    if (!msgs.length) { list.innerHTML = '<div class="empty-state">暂无历史记录</div>'; return; }
+
+    // Group: find user messages, bind assistant response
+    let html = '';
+    let pending = null;
+    msgs.forEach(m => {
+      if (m.role === 'user') {
+        if (pending) html += renderHistItem(pending.user, pending.assistant || '');
+        pending = { user: m, assistant: '' };
+      } else if (m.role === 'assistant' && pending) {
+        pending.assistant = m.content;
+      }
+    });
+    if (pending) html += renderHistItem(pending.user, pending.assistant || '');
+
+    // Also add orphaned assistant messages
+    let lastRole = '';
+    msgs.forEach(m => {
+      if (m.role === 'assistant' && lastRole !== 'user') {
+        html += renderHistItem(m, '');
+      }
+      lastRole = m.role;
+    });
+
+    list.innerHTML = html || '<div class="empty-state">无历史记录</div>';
+  } catch { }
+}
+
+function renderHistItem(msg, reply) {
+  const id = 'h' + Math.random().toString(36).slice(2, 7);
+  const time = (msg.time || '').slice(11, 19) || '—';
+  const preview = msg.content.replace(/</g,'&lt;').replace(/\n/g,' ').slice(0, 60);
+  const replyHtml = reply ? reply.replace(/</g,'&lt;').replace(/\n/g,'<br>') : '(空)';
+  return `<div class="hist-item" onclick="toggleHist('${id}')">
+    <span class="icon">👤</span>
+    <span class="time">${time}</span>
+    <span class="preview">${preview}</span>
+    <span class="arrow">▸</span>
+  </div>
+  <div class="hist-detail" id="${id}"><strong>🤖 回复</strong><br>${replyHtml}</div>`;
+}
+
+function toggleHist(id) {
+  const el = document.getElementById(id);
+  const item = el.previousElementSibling;
+  if (!el) return;
+  el.classList.toggle('open');
+  item.classList.toggle('open');
+}
+
+// ====== Skills & MCP ======
+async function loadSkills() {
+  try {
+    const s = await (await fetch('/api/skills')).json();
+    document.getElementById('skillCount').textContent = s.length || '0';
+    window._skills = s;
+  } catch { }
+}
+async function loadMcp() {
+  try {
+    const m = await (await fetch('/api/mcp')).json();
+    document.getElementById('mcpCount').textContent = Array.isArray(m) ? m.length : '0';
+    window._mcp = Array.isArray(m) ? m : [];
+  } catch { window._mcp = []; }
+}
+
+// ====== Three Memories ======
+async function loadMemory() {
+  try {
+    const mem = await (await fetch('/api/memory')).json();
+    sessionData = mem.sessions || [];
+
+    // Memory 1: System/SOUL
+    const soul = await (await fetch('/api/config')).text();
+    const firstLine = soul.split('\n')[0] || '—';
+    document.getElementById('memPreview1').textContent = firstLine.slice(0, 40);
+
+    // Memory 2: Conversation count
+    try {
+      const h = await (await fetch('/api/history')).json();
+      document.getElementById('memPreview2').textContent = `${h.length} 条消息 · ${mem.sessions?.length || 0} 个会话`;
+    } catch { }
+
+    // Memory 3: Environment
+    document.getElementById('memPreview3').textContent = envData.provider || '—';
+  } catch { }
+}
+
+// ====== Logs ======
+async function loadLogs() {
+  try {
+    const raw = await (await fetch('/api/logs')).text();
+    logData = raw.split('\n').filter(Boolean).slice(-50);
+  } catch { logData = ['(unreachable)']; }
+}
+
+// ====== Modal ======
+async function openModal(type) {
+  const overlay = document.getElementById('modalOverlay');
+  const title = document.getElementById('modalTitle');
+  const body = document.getElementById('modalBody');
+
+  if (type === 'env') {
+    title.textContent = '环境信息';
+    body.innerHTML = `<table><tr><td>Gateway</td><td>${envData.gateway||'—'}</td></tr>
+      <tr><td>Auth Token</td><td>${envData.auth||'—'}</td></tr>
+      <tr><td>DM Policy</td><td>${envData.dm||'—'}</td></tr>
+      <tr><td>Provider</td><td>${envData.provider||'—'}</td></tr>
+      <tr><td>Base URL</td><td>${envData.base||'—'}</td></tr>
+      <tr><td>Group Policy</td><td>${envData.group||'—'}</td></tr></table>`;
+  } else if (type === 'sessions') {
+    title.textContent = '最近对话';
+    if (!sessionData.length) {
+      body.innerHTML = '<div class="empty-state">暂无会话</div>';
+    } else {
+      body.innerHTML = '<table>' + sessionData.slice(0, 30).map(s =>
+        `<tr><td>${s.platform||'?'}</td><td>${s.session_id||'—'}</td><td style="color:var(--dim)">${(s.updated||'').slice(11,19)||'—'}</td></tr>`
+      ).join('') + '</table>';
+    }
+  } else if (type === 'logs') {
+    title.textContent = '实时日志';
+    await loadLogs();
+    body.innerHTML = logData.length ? logData.map(l =>
+      `<div class="log-line"><span class="lt">${l.slice(0,8)}</span>${l.slice(8)}</div>`
+    ).join('') : '<div class="empty-state">暂无日志</div>';
+  } else if (type === 'memory1') {
+    title.textContent = '系统记忆 — SOUL / System Prompt';
+    try {
+      const soul = await (await fetch('/api/config')).text();
+      body.innerHTML = `<pre style="font-size:12px;white-space:pre-wrap;word-break:break-all">${soul.replace(/</g,'&lt;')}</pre>`;
+    } catch { body.innerHTML = '<div class="empty-state">加载失败</div>'; }
+  } else if (type === 'memory2') {
+    title.textContent = '对话记忆 — Sessions';
+    try {
+      const h = await (await fetch('/api/history')).json();
+      body.innerHTML = `<div style="margin-bottom:8px">共 ${h.length} 条消息，${sessionData.length} 个会话</div>`;
+      body.innerHTML += sessionData.length ? sessionData.map(s =>
+        `<div style="padding:4px 0;border-bottom:1px solid var(--border);font-size:12px">📱 ${s.session_id} — ${(s.updated||'').slice(0,19)}</div>`
+      ).join('') : '<div class="empty-state">暂无会话</div>';
+    } catch { body.innerHTML = '<div class="empty-state">加载失败</div>'; }
+  } else if (type === 'capabilities') {
+    title.textContent = '⚡ Hermes 能力总览';
+    body.innerHTML = '<div class="empty-state"><span class="spinner"></span></div>';
+    overlay.classList.add('open');
+    const cap = await (await fetch('/api/capabilities')).json();
+    const t = cap.tools || {};
+    const sk = cap.skills || {};
+    const mp = cap.mcp || {};
+    const mem = cap.memory_plugins || {};
+    const sess = cap.sessions || {};
+    body.innerHTML = `
+      <div style="margin-bottom:12px;font-size:12px;color:var(--dim)">${cap.version||''}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px">
+        <div class="stat"><div class="stat-label">🔧 内置工具</div><div class="stat-value">${t.total||0}</div><div class="stat-sub">${t.enabled||0} 启用 · ${t.disabled||0} 禁用</div></div>
+        <div class="stat"><div class="stat-label">🧩 Skills</div><div class="stat-value">${sk.count||0}</div><div class="stat-sub">自定义技能</div></div>
+        <div class="stat"><div class="stat-label">🔌 MCP</div><div class="stat-value">${mp.count||0}</div><div class="stat-sub">扩展服务</div></div>
+        <div class="stat"><div class="stat-label">💾 记忆</div><div class="stat-value">${mem.count||0}</div><div class="stat-sub">存储插件</div></div>
+        <div class="stat"><div class="stat-label">📁 会话</div><div class="stat-value">${sess.count||0}</div><div class="stat-sub">${sess.messages||0} 条消息</div></div>
+        <div class="stat"><div class="stat-label">🔨 调用统计</div><div class="stat-value">${t.list ? t.list.reduce((a,b)=>a+(b.uses||0),0) : 0}</div><div class="stat-sub">工具总调用次数</div></div>
+      </div>`;
+    // Built-in tools detail
+    body.innerHTML += `<div class="card-title" style="margin-top:8px">🔧 内置工具 (${t.total||0})</div>`;
+    if (t.list && t.list.length) {
+      t.list.sort((a,b) => (b.uses||0) - (a.uses||0)).forEach(tl => {
+        const dot = tl.status === 'enabled' ? '#4caf50' : '#e74c3c';
+        const uses = tl.uses || 0;
+        body.innerHTML += `<div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px;border-bottom:1px solid var(--border)">
+          <span style="color:${dot};font-size:14px">●</span>
+          <span style="font-weight:500;min-width:100px">${tl.name||'?'}</span>
+          <span style="color:var(--dim);flex:1">${tl.desc||''}</span>
+          <span style="font-size:11px;color:var(--accent);background:var(--accent-bg);padding:1px 6px;border-radius:8px">${uses}次</span>
+        </div>`;
+      });
+    } else {
+      body.innerHTML += '<div class="empty-state">无工具数据</div>';
+    }
+    // Memory plugins
+    if (mem.list && mem.list.length) {
+      body.innerHTML += `<div class="card-title" style="margin-top:8px">💾 记忆插件 (${mem.count})</div>`;
+      mem.list.forEach(p => {
+        body.innerHTML += `<div style="padding:3px 0;font-size:12px;border-bottom:1px solid var(--border)">• ${p.name} <span style="color:var(--dim)">${p.note||''}</span></div>`;
+      });
+    }
+  } else if (type === 'cron') {
+    title.textContent = '⏰ 定时任务管理';
+    body.innerHTML = '<div class="empty-state"><span class="spinner"></span></div>';
+    overlay.classList.add('open');
+    await loadCron();
+  } else if (type === 'skills') {
+    title.textContent = '🧩 Skills';
+    const skills = window._skills || [];
+    body.innerHTML = `<div style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><span>共 ${skills.length} 个技能</span><button class="btn btn-sm" onclick="showNewSkillForm()">+ 新增</button></div>`;
+    if (!skills.length) {
+      body.innerHTML += '<div class="empty-state">暂无技能，点击上方按钮新增</div>';
+    } else {
+      body.innerHTML += skills.map(s => `<div style="padding:8px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="showSkillDetail('${s.file}')">
+        <div style="font-weight:500">${s.name}</div>
+        <div style="font-size:12px;color:var(--dim);margin-top:2px">${s.description}</div>
+        <div style="font-size:11px;color:var(--dim);margin-top:2px">创建: ${s.created}</div>
+      </div>`).join('');
+    }
+  } else if (type === 'mcp') {
+    title.textContent = '🔌 MCP Servers';
+    const mcp = window._mcp || [];
+    body.innerHTML = `<div>共 ${mcp.length} 个 MCP 服务</div>`;
+    if (!mcp.length) {
+      body.innerHTML += '<div class="empty-state">暂无 MCP 服务</div>';
+    } else {
+      body.innerHTML += '<table>' + mcp.map(m => `<tr><td>${m.name||'?'}</td><td style="font-size:12px;color:var(--dim)">${m.url||'?'}</td><td>${m.status||'?'}</td></tr>`).join('') + '</table>';
+    }
+    } else if (type === 'memory3') {
+      title.textContent = '环境记忆 — 运行时状态';
+      body.innerHTML = `<table><tr><td>Container</td><td id="containerStatus">—</td></tr>
+        <tr><td>Ollama</td><td>${document.getElementById('ollamaStatus')?.textContent||'—'}</td></tr>
+        <tr><td>WeChat</td><td>${document.getElementById('wechatStatus')?.textContent||'—'}</td></tr>
+        <tr><td>Gateway</td><td>${envData.gateway||'—'}</td></tr>
+        <tr><td>Model</td><td>${document.getElementById('ollamaModel')?.textContent||'—'}</td></tr>
+        <tr><td>DM Policy</td><td>${envData.dm||'—'}</td></tr></table>`;
+    } else if (type === 'models') {
+      title.textContent = '🖥 Ollama 模型管理';
+      body.innerHTML = '<div class="empty-state"><span class="spinner"></span> 加载模型列表...</div>';
+      overlay.classList.add('open');
+      loadModelList();
+    }
+  overlay.classList.add('open');
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+// ====== Query ======
+async function sendQuery() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  const box = document.getElementById('chatBox');
+  addMsg('user', text);
+  const id = addMsg('bot', '<span class="spinner"></span> 思考中...');
+  try {
+    const d = await (await fetch('/api/query', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({prompt:text, model:'qwen3:8b'}) })).json();
+    const el = document.querySelector(`[data-l="${id}"]`);
+    if (el) el.innerHTML = (d.response || '(空)').replace(/\n/g,'<br>');
+  } catch(e) {
+    const el = document.querySelector(`[data-l="${id}"]`);
+    if (el) el.textContent = '请求失败: ' + e.message;
+  }
+  box.scrollTop = box.scrollHeight;
+}
+
+let mid = 0;
+function addMsg(role, content) {
+  const id = ++mid;
+  const box = document.getElementById('chatBox');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = `<div class="avatar">${role==='user'?'U':'H'}</div><div class="bubble" data-l="${id}">${content}</div>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  return id;
+}
+
+// ====== Cron Actions ======
+async function loadCron() {
+  const body = document.getElementById('modalBody');
+  try {
+    const raw = await (await fetch('/api/cron/list')).text();
+    const hasJobs = raw.includes('Scheduled') && raw.includes('active');
+    body.innerHTML = `<div style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+      <span>定时任务列表</span>
+      <div style="display:flex;gap:4px">
+        <button class="btn btn-sm" onclick="showNewCronForm()">+ 新建</button>
+        <button class="btn btn-sm" onclick="cronTick()">▶ 执行一次</button>
+      </div>
+    </div>`;
+    if (hasJobs) {
+      const lines = raw.split('\n').filter(l => l.trim());
+      let currentId = '', currentName = '';
+      lines.forEach(l => {
+        l = l.trim();
+        if (l.match(/^[0-9a-f]{12,}\s*\[/)) {
+          currentId = l.split(/\s/)[0];
+        } else if (l.startsWith('Name:')) {
+          currentName = l.replace('Name:','').trim();
+        } else if (l.startsWith('Schedule:')) {
+          body.innerHTML += `<div style="padding:6px 0;border-bottom:1px solid var(--border);font-size:12px">
+            <strong>${currentName||'?'}</strong> <span style="color:var(--dim)">${l.replace('Schedule:','').trim()}</span>
+            <button class="btn btn-sm" style="float:right" onclick="removeCron('${currentId}')">✕</button>
+          </div>`;
+        } else if (l.startsWith('Next run:')) {
+          body.innerHTML += `<div style="font-size:11px;color:var(--dim);margin:-4px 0 4px 0">下次: ${l.replace('Next run:','').trim()}</div>`;
+        }
+      });
+    } else {
+      body.innerHTML += '<div class="empty-state">暂无定时任务，点击「+ 新建」创建</div>';
+    }
+  } catch { body.innerHTML = '<div class="empty-state">加载失败</div>'; }
+}
+function showNewCronForm() {
+  const body = document.getElementById('modalBody');
+  body.innerHTML = `<div style="margin-bottom:8px;font-weight:500">新建定时任务</div>
+    <div style="margin-bottom:8px"><label style="font-size:12px;color:var(--dim);display:block;margin-bottom:4px">任务描述</label>
+    <textarea id="cronPrompt" rows="2" style="width:100%;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;outline:none;resize:vertical" placeholder="例如: 每天早上说早安"></textarea></div>
+    <div style="margin-bottom:8px"><label style="font-size:12px;color:var(--dim);display:block;margin-bottom:4px">时间</label>
+    <input id="cronSchedule" style="width:100%;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;outline:none" placeholder="例如: 0 9 * * * 或 every 2h 或 30m"></div>
+    <div style="margin-bottom:8px"><label style="font-size:12px;color:var(--dim);display:block;margin-bottom:4px">名称 (可选)</label>
+    <input id="cronName" style="width:100%;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;outline:none" placeholder="morning-greeting"></div>
+    <div style="margin-bottom:8px;display:flex;gap:8px"><label style="font-size:12px;color:var(--dim)">结果发送到:</label>
+      <select id="cronDeliver" style="padding:4px 8px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px">
+        <option value="origin">微信 (origin)</option>
+        <option value="local">本地 (local)</option>
+      </select></div>
+    <button class="btn btn-sm primary" onclick="createCron()">创建</button>
+    <button class="btn btn-sm" onclick="loadCron()" style="margin-left:4px">取消</button>`;
+}
+async function createCron() {
+  const prompt = document.getElementById('cronPrompt').value.trim();
+  const schedule = document.getElementById('cronSchedule').value.trim();
+  const name = document.getElementById('cronName').value.trim();
+  const deliver = document.getElementById('cronDeliver').value;
+  if (!prompt || !schedule) { showToast('请填写任务描述和时间'); return; }
+  const res = await fetch('/api/cron/create', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({prompt, schedule, name, deliver})
+  });
+  const data = await res.json();
+  showToast(data.result || '已创建');
+  await loadCron();
+}
+async function removeCron(id) {
+  if (!confirm('删除定时任务 ' + id + '?')) return;
+  const res = await fetch('/api/cron/remove', {
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({job_id: id})
+  });
+  await loadCron();
+}
+async function cronTick() {
+  showToast('执行中...');
+  await fetch('/api/cron/tick', {method:'POST'});
+  showToast('已触发');
+  await loadCron();
+}
+
+// ====== Skill Actions ======
+function showNewSkillForm() {
+  const body = document.getElementById('modalBody');
+  body.innerHTML = `<div style="margin-bottom:10px"><label style="font-size:12px;color:var(--dim);display:block;margin-bottom:4px">技能名称</label><input id="skName" style="width:100%;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;outline:none" placeholder="my-skill"></div>
+  <div style="margin-bottom:10px"><label style="font-size:12px;color:var(--dim);display:block;margin-bottom:4px">技能描述</label><textarea id="skDesc" rows="3" style="width:100%;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:13px;outline:none;resize:vertical" placeholder="技能的作用描述"></textarea></div>
+  <button class="btn btn-sm primary" onclick="createSkill()">创建</button>
+  <button class="btn btn-sm" onclick="openModal('skills')" style="margin-left:4px">取消</button>`;
+}
+async function createSkill() {
+  const name = document.getElementById('skName').value.trim();
+  const desc = document.getElementById('skDesc').value.trim();
+  if (!name) { showToast('请输入名称'); return; }
+  const res = await fetch('/api/skill/create', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name, description:desc||name}) });
+  const data = await res.json();
+  if (data.ok) {
+    showToast('已创建: ' + name);
+    await loadSkills();
+    openModal('skills');
+  } else { showToast('创建失败'); }
+}
+function showSkillDetail(name) {
+  const skills = window._skills || [];
+  const skill = skills.find(s => s.file === name);
+  if (!skill) return;
+  const body = document.getElementById('modalBody');
+  body.innerHTML = `<div style="margin-bottom:8px"><strong>${skill.name}</strong> <span style="font-size:11px;color:var(--dim)">${skill.created}</span></div>
+    <div style="margin-bottom:12px;font-size:13px">${skill.description}</div>
+    <div style="font-size:12px;color:var(--dim);margin-bottom:4px">内容:</div>
+    <pre style="font-size:11px;background:var(--bg);padding:10px;border-radius:6px;overflow-x:auto;white-space:pre-wrap">${skill.content.replace(/</g,'&lt;')}</pre>
+    <button class="btn btn-sm" onclick="openModal('skills')" style="margin-top:8px">← 返回</button>`;
+}
+
+// ====== Actions ======
+async function action(type) {
+  showToast('执行中...');
+  try {
+    await fetch('/api/action', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({action:type}) });
+    showToast('操作完成');
+  } catch { showToast('操作失败'); }
+  setTimeout(refreshAll, type.includes('restart') ? 3000 : 1000);
+}
+
+// ====== Config ======
+async function loadConfig() {
+  try {
+    const res = await fetch('/api/config');
+    document.getElementById('configYaml').textContent = res.ok ? await res.text() : '—';
+  } catch { document.getElementById('configYaml').textContent = '—'; }
+}
+
+// ====== Toast ======
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  clearTimeout(t._h); t._h = setTimeout(() => { t.style.display = 'none'; }, 2000);
+}
+
+// ====== Model Management ======
+async function loadModelList() {
+  const body = document.getElementById('modalBody');
+  try {
+    const d = await (await fetch('/api/ollama/models')).json();
+    const models = d.models || [];
+    if (d.error) { body.innerHTML = `<div class="empty-state">Ollama 未连接: ${d.error}</div>`; return; }
+    if (!models.length) { body.innerHTML = '<div class="empty-state">暂无模型，请先 pull</div>'; return; }
+    let html = `<div style="margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+      <span>共 ${models.length} 个模型</span>
+      <button class="btn btn-sm" onclick="loadModelList()">⟳ 刷新</button>
+    </div>`;
+    models.sort((a,b) => b.size - a.size);
+    models.forEach(m => {
+      const size = m.size > 1e9 ? (m.size/1e9).toFixed(1)+'GB' : (m.size/1e6).toFixed(0)+'MB';
+      const time = (m.modified || '').slice(0,10) || '—';
+      html += `<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+        <span style="font-weight:500;flex:1">${m.name}</span>
+        <span style="font-size:11px;color:var(--dim)">${size}</span>
+        <span style="font-size:11px;color:var(--dim)">${time}</span>
+        <button class="btn btn-sm" onclick="setModel('${m.name}')" style="background:var(--accent);color:#fff;border:none">使用</button>
+      </div>`;
+    });
+    body.innerHTML = html;
+  } catch(e) { body.innerHTML = `<div class="empty-state">加载失败: ${e.message}</div>`; }
+}
+async function setModel(name) {
+  if (!confirm(`切换默认模型为 "${name}"？`)) return;
+  try {
+    const r = await fetch('/api/ollama/set-model', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({model:name})
+    });
+    const d = await r.json();
+    if (d.ok) {
+      showToast(`✓ 已切换: ${name}\n${d.config || ''}\n${d.restart || ''}`);
+      loadModelList();
+      refreshAll();
+    } else {
+      showToast(`✗ 切换失败: ${d.error || '未知错误'}`);
+    }
+  } catch(e) {
+    showToast(`✗ 请求失败: ${e.message}`);
+  }
+}
+
+// ====== Dashboard Chat ======
+let dashMid = 0;
+function addDashMsg(role, content) {
+  const id = ++dashMid;
+  const box = document.getElementById('dashChatBox');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = `<div class="avatar">${role==='user'?'U':'D'}</div><div class="bubble" data-dl="${id}">${content}</div>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  return id;
+}
+async function sendDashChat() {
+  const input = document.getElementById('dashChatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  addDashMsg('user', text);
+  const id = addDashMsg('bot', '<span class="spinner"></span> 执行中...');
+  try {
+    const r = await fetch('/api/dashboard/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:text})
+    });
+    const d = await r.json();
+    const el = document.querySelector(`[data-dl="${id}"]`);
+    if (el) el.innerHTML = (d.response || '(无返回)').replace(/\n/g,'<br>');
+  } catch(e) {
+    const el = document.querySelector(`[data-dl="${id}"]`);
+    if (el) el.textContent = '请求失败: ' + e.message;
+  }
+  document.getElementById('dashChatBox').scrollTop = document.getElementById('dashChatBox').scrollHeight;
+}
+
+// ====== Init ======
+document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+refreshAll();
+</script>
+</body>
+</html>

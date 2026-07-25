@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Hermes CLI Wrapper for Windows/Git Bash
+# Usage: hermes-cli [hermes_flags...] prompt
+#   One-shot:  hermes-cli "你的问题"
+#   Interactive: hermes-cli --chat
+#   Custom model: hermes-cli -m deepseek-r1:14b "问题"
+
+CONTAINER="hermes"
+MODEL="qwen3:8b"
+
+# Parse: if last arg looks like a prompt (not starting with -), treat it as -z
+args=()
+prompt=""
+for arg in "$@"; do
+  if [[ "$arg" == "--chat" ]]; then
+    exec wsl -d Ubuntu -e bash -c "docker exec -it $CONTAINER hermes --tui 2>&1"
+  fi
+  args+=("$arg")
+done
+
+if [[ "$#" -gt 0 && "${!#}" != --* && "${!#}" != -?* ]]; then
+  # Last arg is a plain prompt -> wrap in -z
+  prompt="${!#}"
+  set -- "${@:1:$#-1}"
+  exec wsl -d Ubuntu -e bash -c "docker exec $CONTAINER hermes -z '$prompt' -m $MODEL $* 2>&1"
+fi
+
+exec wsl -d Ubuntu -e bash -c "docker exec $CONTAINER hermes $* 2>&1"
