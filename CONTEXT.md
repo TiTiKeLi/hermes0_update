@@ -91,3 +91,54 @@ search_backend='' 导致"联网"操作失败。已修复为 duckduckgo。
 | 2026-07-25 | 创建 CONTEXT.md + config-unification 技能 | 新文件 |
 | 2026-07-25 | 清除 terminal.docker_env 死代理 | config.yaml |
 | 2026-07-25 | 配置 web 搜索后端 duckduckgo | config.yaml |
+
+## 文件结构说明
+
+### 根目录（62 个文件）
+所有 Hermes 启动时必须找到的配置文件和核心脚本。
+**不要移动这些文件**，Hermes 通过硬编码路径引用它们。
+
+| 类别 | 文件 | 能否移动 |
+|------|------|---------|
+| 配置 | config.yaml, docker-compose.yml, Dockerfile, .env | ❌ Hermes 直接引用 |
+| 核心脚本 | gui.py, dashboard.py, healthcheck.sh, host_proxy.py 等 | ❌ volume 根是工作目录 |
+| 身份 | MEMORY.md, SOUL.md, USER.md | ❌ Hermes 启动时读取 |
+| 技能 | skills/ | ❌ Hermes 技能系统引用 |
+| 启动脚本 | start-*.ps1, *.vbs, *.bat | ⚠️ 可移，但已 gitignored |
+
+### 数据目录（全部被 .gitignore 排除）
+| 目录 | 内容 | 安全级别 |
+|------|------|---------|
+| sessions/ | 对话历史 | 🔴 包含用户输入和 AI 回复 |
+| memories/ | 长期记忆 | 🔴 包含系统知识 |
+| incoming/ | 请求转储、JSONL 日志 | 🔴 包含 API 请求内容 |
+| cache/ | 缓存文件 | 🟡 无敏感信息但无版本价值 |
+| logs/ | 运行时日志 | 🟡 可能含错误堆栈 |
+| backups/ | 配置备份 | 🟡 含配置文件历史版本 |
+| cron/output/ | 定时任务输出 | 🟡 运行时日志 |
+
+### .gitignore 排除模式覆盖率（22 类）
+`
+数据库     *.db, *.db-wal, *.shm, *.sqlite
+缓存       __pycache__/, cache/, *.pyc, *.json 大文件
+日志       *.log, logs/
+数据目录   sessions/, memories/, incoming/
+备份       backups/, *.bak
+密钥       .env, auth.json, wechat_qr.*
+运行时状态  gateway_state.json, ticker_*, heartbeat_last.json
+定时输出   cron/output/
+临时文件   *.lock, *.pid
+大型文件   *.zip, tirith, crewAI.zip
+会话       session_*.json, sessions/*.json
+请求转储   request_dump_*
+JSONL      *.jsonl
+音频       *.mp3
+Python 编译 *.pyc, *.pyo, *.pyd
+运行时JSON  registry.json, trusted.json, model_catalog.json
+配置备份   config.yaml.bak, docker-compose.yml.bak
+启动脚本   *.vbs, *.bat
+OS 文件    Thumbs.db, .DS_Store
+版本历史   versions/
+测试文件   test_embed.py, _test_ds.py
+空目录     bin/
+技能缓存   skills/.curator_*
