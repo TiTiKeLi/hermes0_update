@@ -232,3 +232,38 @@ Layer 3: 定时同步守卫（自动防护）
 
 ### 手动全量审计
   .\data-security-audit.ps1 -FullScan
+
+### Gitleaks 对比验证结果
+
+| 维度 | 我们的系统 | Gitleaks (行业标准) |
+|------|-----------|-------------------|
+| 文件类型扫描 | 22种模式 | ✅ 内置 |
+| 密钥模式数 | ~8种 | 150+种 |
+| 熵检测 | ❌ | ✅ |
+| 全量历史扫描 | ❌ | ✅ |
+| 9 commits 全量结果 | — | **无泄漏** ✅ |
+
+**结论**：Gitleaks 验证了我们当前的安全状态是无泄漏的。
+但我们的自定义脚本缺少 150+ 种密钥模式和熵检测，建议保持 Gitleaks 作为第二道防线。
+
+### 当前安全架构（三层 + 行业工具）
+
+`
+Layer 1: .gitignore
+  22类排除模式
+
+Layer 2: data-security-audit.ps1
+  文件名 + 内容密钥扫描
+
+Layer 3: Gitleaks
+  150+模式 + 熵检测
+  
+Commit 触发 → Layer 1 → Layer 2 → Layer 3 → 允许提交
+                                              ↓
+                                          失败 → 阻止
+`
+
+### 安装要求
+
+Gitleaks 已安装到: C:\Users\Lsc\AppData\Local\gitleaks\gitleaks.exe
+首次安装后需要管理员权限运行一次来为 git hooks 注册路径。
