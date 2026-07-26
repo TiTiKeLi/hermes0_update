@@ -29,7 +29,7 @@
 | thinking | 2 | 深度需求分析, 结构化推理 |
 | workflow | 17 | 工作流编排, 外部适配, 版本管理, 质量门禁等 |
 | meta | 1 | 技能创建规则 |
-| finance | 1 | 金融分析 |
+| finance | — | 本地仅存 |
 | misc | 1 | 看板修改器 |
 
 ### 脚本与工具
@@ -104,3 +104,4 @@ docker exec hermes hermes skills list
 ## 许可证
 
 Nous Research Hermes 派生项目。
+
