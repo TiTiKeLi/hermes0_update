@@ -332,3 +332,12 @@
   last_updated: 2026-07-26
   created_by: manual
   description: 依赖追踪 — 功能/模块之间的依赖关系图、修改影响范围分析、A→B连锁反应预测
+
+- name: wechat-format
+  status: active
+  category: behavior
+  related: caveman;memory-confirmation-feedback
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: 微信回复格式优化 — 工具检查类只显示数量+结果，普通任务caveman风格
