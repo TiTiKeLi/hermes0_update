@@ -154,3 +154,8 @@ start-proxy.vbs
 
 # === L3 温缓存 ===
 memories/cache/
+
+# === Hermes Bridge（已从 GitHub 删除）===
+codex-bridge/
+skills/architecture/codex-hermes-bridge/
+skills/codex-bridge/
