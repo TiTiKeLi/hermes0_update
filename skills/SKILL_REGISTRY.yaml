@@ -350,3 +350,48 @@
   last_updated: 2026-07-26
   created_by: manual
   description: 金融炒股专家 — 行情查询/财报分析/ETF研究/技术面分析/策略回测/学习复习一体化
+
+- name: memory-implementer
+  status: active
+  category: workflow
+  related: project-lifecycle;quality-gates;verification-before-completion;pre-submit-validation
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: 记忆架构实施循环 — P0→P3 优先级执行, 文档中转, 自动推进
+
+- name: pre-submit-validation
+  status: active
+  category: workflow
+  related: quality-gates;verification-before-completion;data-security-audit
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: 项目提交前强制验证 — G1功能/G2数据/G3配置/G4安全/G5计划完整性
+
+- name: chinese-format
+  status: active
+  category: behavior
+  related: wechat-format;caveman;chinese-output
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: 中文格式强制 — 所有输出必须使用中文，禁止英文状态消息
+
+- name: chinese-output
+  status: active
+  category: behavior
+  related: codex-bridge;preference-learning;memory-confirmation-feedback;chinese-format
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: 中文确认输出 — always激活，确认界面 + 状态机往返循环工作流
+
+- name: codex-hermes-bridge
+  status: active
+  category: architecture
+  related: wechat-format;chinese-format;project-lifecycle;memory-implementer
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: Codex↔Hermes 协作流程 — bridge请求/响应、状态机、WeChat确认、精简格式
