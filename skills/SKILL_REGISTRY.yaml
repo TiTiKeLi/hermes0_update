@@ -395,3 +395,21 @@
   last_updated: 2026-07-26
   created_by: manual
   description: Codex↔Hermes 协作流程 — bridge请求/响应、状态机、WeChat确认、精简格式
+
+- name: github-readme-standard
+  status: active
+  category: workflow
+  related: git-version-control;github-project-management;skill-creation-rules
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: GitHub README 编写标准 — 7必需节+9推荐节, 参考React/Vue/VS Code顶级项目
+
+- name: github-project-management
+  status: active
+  category: workflow
+  related: git-version-control;github-readme-standard;quality-gates;config-unification
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: GitHub 项目管理 — GitFlow+Conventional Commits+SemVer, 分支策略+Issue模板+PR流程
