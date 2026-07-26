@@ -1,4 +1,4 @@
-# Hermes Git Sync — 每小时自动提交 + 推送
+# Hermes Git Sync — 仅同步已跟踪文件，不自动添加新文件
 $ErrorActionPreference = "SilentlyContinue"
 Set-Location "C:\Users\Lsc\.hermes"
 
@@ -17,7 +17,6 @@ if (Test-Path $gitleaks) {
 }
 
 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-git add -A
+git add -u                          # 只更新已跟踪文件，不添加新文件
 git commit -m "auto: $timestamp — $($status.Count) files changed"
 git push origin master 2>&1 | Out-Null
-

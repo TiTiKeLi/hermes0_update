@@ -1,0 +1,30 @@
+{
+  "id": "sm-20260726-191255",
+  "type": "skill_update",
+  "state": "COMPLETED",
+  "created_by": "codex",
+  "context": {
+    "summary": "wechat-format v2 已更新，请读取并加载"
+  },
+  "result": null,
+  "error": null,
+  "history": [
+    {
+      "state": "PENDING",
+      "at": "2026-07-26T19:12:55",
+      "by": "codex"
+    },
+    {
+      "state": "PROCESSING",
+      "at": "2026-07-26T19:45:00",
+      "by": "hermes"
+    },
+    {
+      "state": "COMPLETED",
+      "at": "2026-07-26T20:00:18",
+      "by": "hermes"
+    }
+  ],
+  "created_at": "2026-07-26T19:12:55",
+  "updated_at": "2026-07-26T20:00:18"
+}

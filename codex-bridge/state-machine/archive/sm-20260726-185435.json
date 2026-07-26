@@ -1,0 +1,40 @@
+{
+  "id": "sm-20260726-185435",
+  "type": "user_confirmation",
+  "state": "COMPLETED",
+  "created_by": "codex",
+  "context": {
+    "summary": "需要确认是否清理磁盘空间,当前使用率82%"
+  },
+  "result": null,
+  "error": null,
+  "history": [
+    {
+      "state": "PENDING",
+      "at": "2026-07-26T18:54:35",
+      "by": "codex"
+    },
+    {
+      "state": "PROCESSING",
+      "at": "2026-07-26T19:08:52",
+      "by": "hermes"
+    },
+    {
+      "state": "AWAITING_CONFIRMATION",
+      "at": "2026-07-26T19:08:58",
+      "by": "hermes"
+    },
+    {
+      "state": "CONFIRMED",
+      "at": "2026-07-26T19:09:54",
+      "by": "wechat_user"
+    },
+    {
+      "state": "COMPLETED",
+      "at": "2026-07-26T19:10:24",
+      "by": "hermes"
+    }
+  ],
+  "created_at": "2026-07-26T18:54:35",
+  "updated_at": "2026-07-26T19:10:24"
+}

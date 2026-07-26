@@ -1,0 +1,30 @@
+{
+  "id": "sm-20260726-195134",
+  "type": "test_event",
+  "state": "COMPLETED",
+  "created_by": "codex",
+  "context": {
+    "summary": "事件触发测试"
+  },
+  "result": null,
+  "error": null,
+  "history": [
+    {
+      "state": "PENDING",
+      "at": "2026-07-26T19:51:34",
+      "by": "codex"
+    },
+    {
+      "state": "PROCESSING",
+      "at": "2026-07-26T20:00:42",
+      "by": "hermes"
+    },
+    {
+      "state": "COMPLETED",
+      "at": "2026-07-26T20:00:42",
+      "by": "hermes"
+    }
+  ],
+  "created_at": "2026-07-26T19:51:34",
+  "updated_at": "2026-07-26T20:00:42"
+}

@@ -1,0 +1,17 @@
+ {
+   "id": "sm-example-mcp001",
+   "type": "mcp_auth",
+   "state": "AWAITING_CONFIRMATION",
+   "created_by": "hermes",
+   "context": {
+     "summary": "需要 GitHub Token 授权",
+     "detail": "MCP GitHub 工具需要用户授权才能访问私有仓库",
+     "permissions": ["repo:read", "issues:write"],
+     "timeout_minutes": 60
+   },
+   "history": [
+     {"state": "PENDING", "at": "2026-07-26T18:05:00", "by": "codex"},
+     {"state": "PROCESSING", "at": "2026-07-26T18:05:30", "by": "hermes"},
+     {"state": "AWAITING_CONFIRMATION", "at": "2026-07-26T18:06:00", "by": "hermes"}
+   ]
+ }

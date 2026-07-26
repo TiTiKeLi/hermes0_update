@@ -151,3 +151,6 @@ state.json
 start-dashboard.bat
 start-daemon.vbs
 start-proxy.vbs
+
+# === L3 温缓存 ===
+memories/cache/
