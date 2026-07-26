@@ -33,10 +33,13 @@ Hermes Docker 容器的全量优化。涵盖 MEMORY.md 压缩、图片错误修�
 
 ## 1. MEMORY.md 压缩
 
-> ⚠️ **已过时** — 自动化的记忆压缩已迁移至独立 skill `memory-compactor`（`memory_compactor_v2.py`，每5分钟 cron 自动运行）。本节保留仅作早期手动压缩的历史参考。
+> ⚠️ **已过时 — 迁移至独立 skill**
 > 
-> 当前压缩架构 → `skill memory-compactor`
-> 记忆架构设计模式（含 MemGPT/Mem0 对比）→ `skill agent-memory-architecture`
+> 自动化的记忆压缩已迁移至独立 skill：
+> - **👉 `skill memory-compactor`** — 压缩实现（`memory_compactor_v2.py`，每5分钟 cron 自动运行）← **当前使用者**
+> - `skill agent-memory-architecture` — 记忆架构设计模式（含 MemGPT/Mem0 对比）
+> 
+> 本节保留仅作早期手动压缩的历史参考。
 
 ### 前置条件
 - 文件位于 `C:\Users\Lsc\.hermes\MEMORY.md`

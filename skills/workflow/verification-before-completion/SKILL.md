@@ -73,6 +73,7 @@ triggers:
 | Bug 修复 | 重新运行触发 Bug 的原始命令/测试→确认通过 | `terminal` | 修复验证输出 |
 | 构建/编译 | 重新运行完整构建命令→确认 exit 0 | `terminal` | 构建日志 |
 | 文件写入 | `read_file` 回读→确认内容完整 | `read_file` | 文件内容确认 |
+| 数据依赖型构建（API字段映射） | 先 dump raw API 响应 → 验证每个字段索引的合理性 → 用已知值校验（如茅台PE应≈20） | `terminal`(dump raw API) + `execute_code`(字段校验) | 字段映射验证报告 |
 | 部署/上传 | curl/HTTP 健康检查+响应码验证 | `terminal`(curl) | 部署状态 |
 | 网络请求完成 | 读实际 HTTP 响应/状态码，不靠假设 | `terminal`(curl) | 响应体/状态码 |
 
@@ -157,6 +158,7 @@ assert "exit" in conclusion or "输出" in conclusion or "测试" in conclusion
 | Bug 已修复 | 测试原始症状：通过 | 代码改了，假设已修复 |
 | 构建成功 | 构建命令：exit 0 | linter 通过、日志看起来没问题 |
 | 文件已写 | `read_file` 回读确认 | 写了但没读过 |
+| 数据脚本写好了 | raw API dump 验证每个字段索引 + 脚本运行输出合理 | 只写了代码没跑、跑了没验证输出值合理性 |
 | 部署成功 | curl 健康检查：200 | 部署命令 exit 0 但服务未就绪 |
 
 ### 红线——立即停止检查

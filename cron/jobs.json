@@ -20,18 +20,18 @@
       "schedule_display": "0 9 * * *",
       "repeat": {
         "times": null,
-        "completed": 9
+        "completed": 10
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-06-18T19:38:11.372668+08:00",
-      "next_run_at": "2026-07-26T09:00:00+08:00",
-      "last_run_at": "2026-07-25T09:11:56.893980+08:00",
+      "next_run_at": "2026-07-27T09:00:00+08:00",
+      "last_run_at": "2026-07-26T09:11:11.159813+08:00",
       "last_status": "ok",
       "last_error": null,
-      "last_delivery_error": "live adapter send failed: iLink sendmessage rate limited; cooldown active for 30.0s; live adapter delivery to weixin:o9cq802TxGc41l3NREgwTwhicoAk@im.wechat failed: iLink sendmessage rate limited; cooldown active for 30.0s; delivery error: Weixin send failed: iLink sendmessage rate limited; cooldown active for 30.0s",
+      "last_delivery_error": null,
       "deliver": "origin",
       "origin": null,
       "enabled_toolsets": null,
@@ -58,15 +58,15 @@
       "schedule_display": "0 * * * *",
       "repeat": {
         "times": null,
-        "completed": 73
+        "completed": 79
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-21T16:59:03.225695+08:00",
-      "next_run_at": "2026-07-26T00:00:00+08:00",
-      "last_run_at": "2026-07-25T23:01:15.568677+08:00",
+      "next_run_at": "2026-07-26T13:00:00+08:00",
+      "last_run_at": "2026-07-26T12:00:39.603456+08:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -101,15 +101,15 @@
       "schedule_display": "every 30m",
       "repeat": {
         "times": null,
-        "completed": 123
+        "completed": 133
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-21T21:24:30.650239+08:00",
-      "next_run_at": "2026-07-25T23:16:48.726999+08:00",
-      "last_run_at": "2026-07-25T22:46:48.726999+08:00",
+      "next_run_at": "2026-07-26T12:52:13.378601+08:00",
+      "last_run_at": "2026-07-26T12:22:13.378601+08:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -148,15 +148,15 @@
       "schedule_display": "every 5m",
       "repeat": {
         "times": null,
-        "completed": 354
+        "completed": 409
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-22T22:20:41.960949+08:00",
-      "next_run_at": "2026-07-25T23:10:44.674255+08:00",
-      "last_run_at": "2026-07-25T23:05:44.674255+08:00",
+      "next_run_at": "2026-07-26T12:32:09.260633+08:00",
+      "last_run_at": "2026-07-26T12:27:09.260633+08:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -190,15 +190,15 @@
       "schedule_display": "every 30m",
       "repeat": {
         "times": null,
-        "completed": 60
+        "completed": 71
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-24T09:49:44.354136+08:00",
-      "next_run_at": "2026-07-25T23:10:47.912674+08:00",
-      "last_run_at": "2026-07-25T22:40:47.912674+08:00",
+      "next_run_at": "2026-07-26T12:54:17.638781+08:00",
+      "last_run_at": "2026-07-26T12:24:17.638781+08:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -264,10 +264,7 @@
       "name": "autogpt-self-iterate",
       "prompt": "\u8fd0\u884c autogpt-self-improve \u6280\u80fd\u7684\u81ea\u8fed\u4ee3\u95ed\u73af\u3002\u5206\u6790\u6240\u6709\u6280\u80fd\uff0c\u8bc4\u4f30\u8d28\u91cf\uff0c\u751f\u6210\u6539\u8fdb\u65b9\u6848\u3002\n\n\u64cd\u4f5c\u6d41\u7a0b\uff1a\n1. \u52a0\u8f7d autogpt-self-improve skill \u7684 Step 1-5\n2. \u5148 skills_list() \u76d8\u70b9\u5f53\u524d\u6240\u6709\u6280\u80fd\n3. \u5bf9\u6bcf\u4e2a\u6280\u80fd skill_view() \u83b7\u53d6\u5185\u5bb9\n4. cronjob(action='list') \u770b\u54ea\u4e9b\u6709\u6267\u884c\u8bb0\u5f55\n5. \u5bf9\u6267\u884c\u6709\u9519\u8bef\u6216\u8d28\u91cf\u4f4e\u7684\u6280\u80fd\u5199\u6539\u8fdb\u65b9\u6848\n6. \u5c06\u8bc4\u4f30\u62a5\u544a\u5199\u5165 /opt/data/research/self_improve/latest_eval.md\n\n\u7528\u4e2d\u6587\u8f93\u51fa\u7ed3\u679c\u62a5\u544a\u3002\u5982\u679c\u8fde\u7eed 24h \u5185\u5df2\u7ecf\u8dd1\u8fc7\uff0c\u62a5\u544a\u8bf4\"24h \u7a97\u53e3\u5185\uff0c\u8df3\u8fc7\"\u5e76\u9000\u51fa\u3002",
       "skills": [
-        "autogpt-self-improve",
-        "functional-decomp",
-        "interface-decomp",
-        "download-gate"
+        "autogpt-self-improve"
       ],
       "skill": "autogpt-self-improve",
       "model": null,
@@ -286,18 +283,18 @@
       "schedule_display": "every 1440m",
       "repeat": {
         "times": null,
-        "completed": 0
+        "completed": 1
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-25T09:51:54.839666+08:00",
-      "next_run_at": "2026-07-26T09:51:54.955010+08:00",
-      "last_run_at": null,
-      "last_status": null,
+      "next_run_at": "2026-07-27T09:57:17.804679+08:00",
+      "last_run_at": "2026-07-26T09:57:17.804679+08:00",
+      "last_status": "ok",
       "last_error": null,
-      "last_delivery_error": null,
+      "last_delivery_error": "live adapter send failed: iLink sendmessage rate limited; cooldown active for 30.0s; live adapter delivery to weixin:o9cq802TxGc41l3NREgwTwhicoAk@im.wechat failed: iLink sendmessage rate limited; cooldown active for 30.0s; delivery error: Weixin send failed: iLink sendmessage rate limited; cooldown active for 30.0s",
       "deliver": "origin",
       "origin": {
         "platform": "weixin",
@@ -307,7 +304,8 @@
         "user_id": "o9cq802TxGc41l3NREgwTwhicoAk@im.wechat"
       },
       "enabled_toolsets": null,
-      "workdir": null
+      "workdir": null,
+      "fire_claim": null
     },
     {
       "id": "da53157d9535",
@@ -331,15 +329,15 @@
       "schedule_display": "every 5m",
       "repeat": {
         "times": null,
-        "completed": 98
+        "completed": 152
       },
       "enabled": true,
       "state": "scheduled",
       "paused_at": null,
       "paused_reason": null,
       "created_at": "2026-07-25T14:26:47.177683+08:00",
-      "next_run_at": "2026-07-25T23:10:45.107418+08:00",
-      "last_run_at": "2026-07-25T23:05:45.107418+08:00",
+      "next_run_at": "2026-07-26T12:28:04.962129+08:00",
+      "last_run_at": "2026-07-26T12:23:04.962129+08:00",
       "last_status": "ok",
       "last_error": null,
       "last_delivery_error": null,
@@ -356,5 +354,5 @@
       "fire_claim": null
     }
   ],
-  "updated_at": "2026-07-25T23:05:45.111508+08:00"
+  "updated_at": "2026-07-26T12:27:09.271606+08:00"
 }

@@ -9,6 +9,8 @@ conditions:
     - web
 platforms: [linux]
 related_skills:
+  - skill-creation-rules
+  - verification-before-completion
   - functional-decomp
   - interface-decomp
   - arch-decomp

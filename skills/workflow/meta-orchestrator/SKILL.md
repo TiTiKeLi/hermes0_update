@@ -9,7 +9,6 @@ conditions:
 platforms: [linux]
 related_skills:
   - autogpt-self-improve
-  - function-decomp
   - external-adaptor
   - tool-governance-v2
 triggers:

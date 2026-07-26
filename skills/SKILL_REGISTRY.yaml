@@ -341,3 +341,12 @@
   last_updated: 2026-07-26
   created_by: manual
   description: 微信回复格式优化 — 工具检查类只显示数量+结果，普通任务caveman风格
+
+- name: finance-expert
+  status: active
+  category: finance
+  related: ""
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: 金融炒股专家 — 行情查询/财报分析/ETF研究/技术面分析/策略回测/学习复习一体化

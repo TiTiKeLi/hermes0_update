@@ -601,3 +601,25 @@ cronjob run → exit ok
 - 所有必要的操作已完成
 - 结果已向用户报告
 
+---
+
+## 附录 F：异步代理桥接模式（Async Agent Handoff）
+
+*参考文件：`skill_view(name="external-adaptor", file_path="references/async-handoff-bridge.md")`*
+
+### 场景
+外部 AI 代理（Codex / Claude Code / Cursor）**无法在容器内直接运行**时，
+通过文件系统 + Git 同步实现**异步桥接**。
+
+### 核心流程
+```
+Hermes 写请求 → requests/<id>.json
+  → 桥接脚本轮询 → 外部代理处理 → 写响应
+  → responses/<id>.json → Hermes cron 回读 → 验证 → 合并
+```
+
+### 关键约束
+- **异步** — 请求发出后不能即时等待（cron轮询）
+- **自包含** — 外部代理无 Hermes 上下文，请求必须包含所有信息
+- **验证归 Hermes** — 外部代理的 claims 不可信，必须回读验证
+

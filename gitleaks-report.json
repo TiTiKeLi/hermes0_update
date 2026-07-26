@@ -1,0 +1,42 @@
+[
+ {
+  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+  "StartLine": 15,
+  "EndLine": 15,
+  "StartColumn": 11,
+  "EndColumn": 0,
+  "Match": "API_KEY=sk-c9afc95b50a046e995642ce192fa3b42",
+  "Secret": "sk-c9afc95b50a046e995642ce192fa3b42",
+  "File": "C:\\Users\\Lsc\\.hermes\\.env",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 3.832595,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "generic-api-key",
+  "Fingerprint": "C:\\Users\\Lsc\\.hermes\\.env:generic-api-key:15"
+ },
+ {
+  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+  "StartLine": 227,
+  "EndLine": 227,
+  "StartColumn": 9519,
+  "EndColumn": 9567,
+  "Match": "clientId:`pkmer_832ebb0ff9264f7b3019262b47f625ed`",
+  "Secret": "pkmer_832ebb0ff9264f7b3019262b47f625ed",
+  "File": "C:\\Users\\Lsc\\.hermes\\claude-obsidian\\.obsidian\\plugins\\thino\\main.js",
+  "SymlinkFile": "",
+  "Commit": "",
+  "Entropy": 4.0079427,
+  "Author": "",
+  "Email": "",
+  "Date": "",
+  "Message": "",
+  "Tags": [],
+  "RuleID": "generic-api-key",
+  "Fingerprint": "C:\\Users\\Lsc\\.hermes\\claude-obsidian\\.obsidian\\plugins\\thino\\main.js:generic-api-key:227"
+ }
+]
