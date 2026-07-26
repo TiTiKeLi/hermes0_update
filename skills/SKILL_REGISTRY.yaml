@@ -413,3 +413,30 @@
   last_updated: 2026-07-26
   created_by: manual
   description: GitHub 项目管理 — GitFlow+Conventional Commits+SemVer, 分支策略+Issue模板+PR流程
+
+- name: change-validation-cycle
+  status: active
+  category: workflow
+  related: codex-bridge;skill-creation-rules;verification-before-completion;external-adaptor
+  created: 2026-07-26
+  last_updated: 2026-07-26
+  created_by: manual
+  description: 修改验证闭环 — 版本管理→对比确认→执行验证→回退管理。事实驱动+状态器联动。
+
+- name: git-management
+  status: active
+  category: workflow
+  related: quality-gates;data-security-audit
+  created: 2026-07-27
+  last_updated: 2026-07-27
+  created_by: manual
+  description: GitHub 仓库管理 — 分支策略/Conventional Commits/SemVer/定时同步
+
+- name: performance-metrics
+  status: active
+  category: workflow
+  related: health-monitor;data-retention
+  created: 2026-07-27
+  last_updated: 2026-07-27
+  created_by: manual
+  description: 性能度量 — 技能触发频次/记忆压缩率/磁盘趋势/错误频率
