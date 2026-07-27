@@ -10,6 +10,36 @@
    - git-management
  triggers:
    keywords:
+    - 桥接
+    - 状态机
+    - 积压
+    - 残留
+    - 未处理
+    - 归档
+    - 断路
+    - 闭环
+    - 未闭环
+    - 挂起
+    - 卡住
+    - 停滞
+    - 堆积
+    - 没人处理
+    - 未响应
+    - 状态检查
+    - 链路检查
+    - 心跳
+    - 看门狗
+    - 扫描
+    - 检查状态
+    - 通讯
+    - 交互
+    - 两端
+    - 同步
+    - 遗留
+    - 孤儿
+    - 清理
+    - 过期
+
      - 桥接
      - bridge
      - 状态机
@@ -110,3 +140,4 @@
  - [codex-collaboration](../codex-collaboration/SKILL.md) — 状态链定义
  - [external-brain](../../architecture/external-brain/SKILL.md) — 外部大脑定位
  - [session-validation](../session-validation/SKILL.md) — 会话结束前验证
+
