@@ -1,6 +1,7 @@
 # Skill Registry — 所有 skill 的创建记录
 # 格式说明：
 #   name:          技能名（唯一，小写中划线）
+#   version:       语义版本号 (初始 1.0.0)
 #   status:        active | deprecated | merged:<target>
 #   category:      workflow | memory | behavior | security | thinking | architecture
 #   related:       关联skill，多个用 ; 分隔
@@ -35,6 +36,15 @@
   last_updated: 2026-07-24
   created_by: auto
   description: 需求驱动研究管道，V3可执行协议
+
+- name: codex-bridge-monitor
+  status: active
+  category: workflow
+  related: chinese-output;codex-hermes-bridge
+  created: 2026-07-27
+  last_updated: 2026-07-27
+  created_by: auto
+  description: Codex桥接状态主动监测 — 含陈任务降噪
 
 - name: hermes-optimization
   status: active
@@ -449,3 +459,90 @@
   last_updated: 2026-07-27
   created_by: manual
   description: Codex↔Hermes 协同机制 — 状态机协议+事件驱动+用户确认流程, 三方职责+完整生命周期
+
+- name: agent-debug-loop
+  version: 2.0.0
+  status: active
+  category: workflow
+  related: web-connectivity;error-recovery;verification-before-completion
+  created: 2026-07-27
+  last_updated: 2026-07-27
+  created_by: auto
+  description: 多步调试方法论 — SWE-agent/mini-SWE-agent 探查→假设→验证→修复闭环
+
+- name: safe-code-edit
+  version: 2.0.0
+  status: active
+  category: workflow
+  related: agent-debug-loop;verification-before-completion;change-validation-cycle
+  created: 2026-07-27
+  last_updated: 2026-07-27
+  created_by: auto
+  description: 安全代码编辑 — Aider git+lint + SWE-agent 验证模式
+
+- name: api-troubleshoot
+  version: 2.0.0
+  status: active
+  category: workflow
+  related: web-connectivity;agent-debug-loop;error-recovery
+  created: 2026-07-27
+  last_updated: 2026-07-27
+  created_by: auto
+  description: API接口诊断 — curl分层验证→请求修复→端到端验证
+
+- name: agent-tool-patterns
+  version: 1.0.0
+  status: active
+  category: architecture
+  related: tool-governance-v2;safe-code-edit;api-troubleshoot
+  created: 2026-07-27
+  last_updated: 2026-07-27
+  created_by: auto
+  description: Agent工具架构 — SWE-agent Command/Argument + 双解析器模式
+
+- name: cron-delivery-format
+  version: 1.0.0
+  status: active
+  category: behavior
+  related: ""
+  created: 2026-07-27
+  last_updated: 2026-07-27
+  created_by: auto
+  description: iLink 微信 cron 投递管道新行丢失问题 — 所有 cron 输出必须使用单行格式
+
+- name: caveman-requirements
+  version: 1.1.0
+  status: active
+  category: behavior
+  related: deep-need-analysis;skill-dev-loop;verification-before-completion
+  created: 2026-07-27
+  last_updated: 2026-07-27
+  created_by: auto
+  description: 需求口语精简器 — 在搜索/查询前将口语需求转为结构化需求描述
+
+- name: external-brain
+  status: active
+  category: architecture
+  related: codex-collaboration;project-lifecycle;memory-implementer
+  created: 2026-07-27
+  last_updated: 2026-07-27
+  created_by: manual
+  description: 外部大脑定位 — Codex 作为 Hermes 的外部智能层, 规划/编排/监控/闭环, 不间断执行循环
+
+- name: session-validation
+  status: active
+  category: workflow
+  related: quality-gates;verification-before-completion;pre-submit-validation;config-unification
+  created: 2026-07-27
+  last_updated: 2026-07-27
+  created_by: manual
+  description: 会话结束前强制验证 — G1状态机/G2配置/G3技能/G4文档/G5通信, 未通过不结束
+
+- name: bridge-monitor
+  status: active
+  category: workflow
+  related: codex-collaboration;external-brain;session-validation;git-management
+  created: 2026-07-27
+  last_updated: 2026-07-27
+  created_by: manual
+  description: 桥接状态监控 — 检测 state-machine/triggers 积压, 清理残留, 归档已完成, 修复断路。每次会话自动检查。
